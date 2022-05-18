@@ -1,5 +1,5 @@
-use crate::pagination::{GetPage, Paginated};
 use crate::client::{Client, Method};
+use crate::pagination::{GetPage, Paginated};
 use crate::result::*;
 use serde::Serialize;
 
@@ -20,39 +20,46 @@ pub trait ProductApi {
   fn update<P: Serialize>(&self, id: i64, value: P) -> ShopifyResult<Product>;
 }
 
-impl ProductApi for Client {
-  fn list(&self, params: &GetProductListParams) -> ShopifyResult<Paginated<Vec<Product>>> {
+impl Client {
+  async fn list_product(&self, params: &GetProductListParams) -> ShopifyResult<Paginated<Vec<Product>>> {
     shopify_wrap! {
       pub struct Res {
         products: Vec<Product>,
       }
     }
 
-    let res: Paginated<Res> = self.request_with_params_paginated(
-      Method::GET,
-      "/admin/api/2020-07/products.json",
-      params,
-      std::convert::identity,
-    )?;
+    let res: Paginated<Res> = self
+      .request_with_params_paginated(
+        Method::GET,
+        "/admin/api/2020-07/products.json",
+        params,
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
-  fn list_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Product>>> {
+  pub async fn list_product_page(
+    &self,
+    params: &GetPage,
+  ) -> ShopifyResult<Paginated<Vec<Product>>> {
     shopify_wrap! {
       pub struct Res {
         products: Vec<Product>,
       }
     }
-    let res: Paginated<Res> = self.request_with_params_paginated(
-      Method::GET,
-      "/admin/api/2020-07/products.json",
-      params,
-      std::convert::identity,
-    )?;
+    let res: Paginated<Res> = self
+      .request_with_params_paginated(
+        Method::GET,
+        "/admin/api/2020-07/products.json",
+        params,
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
-  fn update<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Product> {
+  async fn update_product<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Product> {
     shopify_wrap! {
       pub struct Res {
         product: Product,
@@ -60,11 +67,13 @@ impl ProductApi for Client {
     }
 
     let path = format!("/admin/api/2020-07/products/{}.json", id);
-    let res: Res = self.request(Method::PUT, &path, move |b| {
-      b.json(&json!({
-        "product": value,
-      }))
-    })?;
+    let res: Res = self
+      .request(Method::PUT, &path, move |b| {
+        b.json(&json!({
+          "product": value,
+        }))
+      })
+      .await?;
     Ok(res.into_inner())
   }
 }
