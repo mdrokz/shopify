@@ -1,6 +1,6 @@
 use crate::client::ShopifyRequestQuery;
 use crate::result::{ShopifyError, ShopifyResult};
-use reqwest::blocking::Response;
+use reqwest::Response;
 use serde::Deserialize;
 use url::Url;
 
@@ -43,7 +43,7 @@ pub struct Paginated<T> {
 }
 
 impl<T> Paginated<T> {
-  pub fn from_res(res: Response) -> ShopifyResult<Paginated<T>>
+  pub async fn from_res(res: Response) -> ShopifyResult<Paginated<T>>
   where
     T: for<'de> Deserialize<'de>,
   {
@@ -67,7 +67,7 @@ impl<T> Paginated<T> {
     Ok(Paginated {
       previous_page_info: previous_url.map(|v| parse_page_info(&v)).transpose()?,
       next_page_info: next_url.map(|v| parse_page_info(&v)).transpose()?,
-      payload: res.json()?,
+      payload: res.json().await?,
     })
   }
 
