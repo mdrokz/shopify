@@ -38,9 +38,9 @@ impl Default for Context {
 
 impl Context {
   pub fn initialize(
-    api_key: String,
-    api_secret_key: String,
-    password: String,
+    api_key: &str,
+    api_secret_key: &str,
+    password: &str,
     scopes: Vec<String>,
   ) -> Result<Self, String> {
     if api_key.is_empty() {
@@ -56,14 +56,14 @@ impl Context {
     }
 
     Ok(Self {
-      api_key,
-      api_secret_key,
+      api_key: api_key.to_string(),
+      api_secret_key: api_secret_key.to_string(),
       scopes,
       ..Default::default()
     })
   }
 
-  pub fn initialize_with_token(access_token: String, scopes: Vec<String>) -> Result<Self, String> {
+  pub fn initialize_with_token(access_token: &str, scopes: Vec<String>) -> Result<Self, String> {
     if access_token.is_empty() {
       return Err(String::from("ACCESS_TOKEN is missing"));
     }
