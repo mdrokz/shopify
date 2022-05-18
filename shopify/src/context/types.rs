@@ -8,6 +8,7 @@
 /// 
 /// `Nightly("unstable")`
 
+#[derive(Debug,Clone)]
 pub enum ApiVersion {
   July21(String),
   October21(String),
