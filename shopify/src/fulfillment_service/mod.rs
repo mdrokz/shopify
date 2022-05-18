@@ -4,30 +4,30 @@ use crate::result::*;
 mod types;
 pub use self::types::*;
 
-pub trait FulfillmentServiceApi {
-  fn get_list(
-    &self,
-    scope: Option<FulfillmentServiceScope>,
-  ) -> ShopifyResult<Vec<FulfillmentService>>;
+// pub trait FulfillmentServiceApi {
+//   fn get_list(
+//     &self,
+//     scope: Option<FulfillmentServiceScope>,
+//   ) -> ShopifyResult<Vec<FulfillmentService>>;
 
-  fn create(
-    &self,
-    fulfillment_service: &NewFulfillmentService,
-  ) -> ShopifyResult<FulfillmentService>;
+//   fn create(
+//     &self,
+//     fulfillment_service: &NewFulfillmentService,
+//   ) -> ShopifyResult<FulfillmentService>;
 
-  fn get(&self, id: i64) -> ShopifyResult<FulfillmentService>;
+//   fn get(&self, id: i64) -> ShopifyResult<FulfillmentService>;
 
-  fn update(
-    &self,
-    id: i64,
-    fulfillment_service: &UpdateFulfillmentService,
-  ) -> ShopifyResult<FulfillmentService>;
+//   fn update(
+//     &self,
+//     id: i64,
+//     fulfillment_service: &UpdateFulfillmentService,
+//   ) -> ShopifyResult<FulfillmentService>;
 
-  fn delete(&self, id: i64) -> ShopifyResult<()>;
-}
+//   fn delete(&self, id: i64) -> ShopifyResult<()>;
+// }
 
-impl FulfillmentServiceApi for Client {
-  fn get_list(
+impl Client {
+  pub async fn get_fulfillment_list(
     &self,
     scope: Option<FulfillmentServiceScope>,
   ) -> ShopifyResult<Vec<FulfillmentService>> {
@@ -42,11 +42,11 @@ impl FulfillmentServiceApi for Client {
       "/admin/fulfillment_services.json",
       &scope.map(|scope| ("scope", scope)),
       std::convert::identity,
-    )?;
+    ).await?;
     Ok(res.into_inner())
   }
 
-  fn create(
+  pub async fn create_fulfillment(
     &self,
     fulfillment_service: &NewFulfillmentService,
   ) -> ShopifyResult<FulfillmentService> {
@@ -58,22 +58,22 @@ impl FulfillmentServiceApi for Client {
     let path = "/admin/fulfillment_services.json";
     let res: Res = self.request(Method::POST, &path, move |b| {
       b.json(&json!({ "fulfillment_service": fulfillment_service }))
-    })?;
+    }).await?;
     Ok(res.into_inner())
   }
 
-  fn get(&self, id: i64) -> ShopifyResult<FulfillmentService> {
+  pub async fn get_fulfillment(&self, id: i64) -> ShopifyResult<FulfillmentService> {
     shopify_wrap! {
       pub struct Res {
         fulfillment_service: FulfillmentService,
       }
     }
     let path = format!("/admin/fulfillment_services/{}.json", id);
-    let res: Res = self.request(Method::GET, &path, std::convert::identity)?;
+    let res: Res = self.request(Method::GET, &path, std::convert::identity).await?;
     Ok(res.into_inner())
   }
 
-  fn update(
+  pub async fn update_fulfillment(
     &self,
     id: i64,
     fulfillment_service: &UpdateFulfillmentService,
@@ -86,11 +86,11 @@ impl FulfillmentServiceApi for Client {
     let path = format!("/admin/fulfillment_services/{}.json", id);
     let res: Res = self.request(Method::PUT, &path, move |b| {
       b.json(&json!({ "fulfillment_service": fulfillment_service }))
-    })?;
+    }).await?;
     Ok(res.into_inner())
   }
 
-  fn delete(&self, id: i64) -> ShopifyResult<()> {
+  pub async fn delete_fulfillment(&self, id: i64) -> ShopifyResult<()> {
     use serde_json::Value;
     shopify_wrap! {
       pub struct Res {
@@ -98,7 +98,7 @@ impl FulfillmentServiceApi for Client {
       }
     }
     let path = format!("/admin/fulfillment_services/{}.json", id);
-    self.request::<Value, _>(Method::DELETE, &path, std::convert::identity)?;
+    self.request::<Value, _>(Method::DELETE, &path, std::convert::identity).await?;
     Ok(())
   }
 }
