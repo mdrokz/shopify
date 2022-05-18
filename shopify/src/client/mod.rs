@@ -218,7 +218,7 @@ impl Client {
       });
     }
 
-    Ok(Paginated::from_res(res)?)
+    Ok(Paginated::from_res(res).await?)
   }
 
   pub async fn request<T, F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<T>
