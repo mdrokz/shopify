@@ -15,14 +15,14 @@ request_query! {
   }
 }
 
-pub trait ProductVariantApi {
-  fn list(&self, params: &GetVariantListParams) -> ShopifyResult<Paginated<Vec<Variant>>>;
-  fn list_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Variant>>>;
-  fn update<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Variant>;
-}
+// pub trait ProductVariantApi {
+//   fn list(&self, params: &GetVariantListParams) -> ShopifyResult<Paginated<Vec<Variant>>>;
+//   fn list_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Variant>>>;
+//   fn update<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Variant>;
+// }
 
-impl ProductVariantApi for Client {
-  fn list(&self, params: &GetVariantListParams) -> ShopifyResult<Paginated<Vec<Variant>>> {
+impl Client {
+  pub async fn list_product_variant(&self, params: &GetVariantListParams) -> ShopifyResult<Paginated<Vec<Variant>>> {
     shopify_wrap! {
       pub struct Res {
         variants: Vec<Variant>,
@@ -34,11 +34,11 @@ impl ProductVariantApi for Client {
       "/admin/api/2020-07/variants.json",
       params,
       std::convert::identity,
-    )?;
+    ).await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
-  fn list_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Variant>>> {
+  pub async fn list_variant_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Variant>>> {
     shopify_wrap! {
       pub struct Res {
         variants: Vec<Variant>,
@@ -49,11 +49,11 @@ impl ProductVariantApi for Client {
       "/admin/api/2020-07/variants.json",
       params,
       std::convert::identity,
-    )?;
+    ).await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
-  fn update<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Variant> {
+ pub async fn update_product_variant<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Variant> {
     shopify_wrap! {
       pub struct Res {
         variant: Variant,
@@ -65,7 +65,7 @@ impl ProductVariantApi for Client {
       b.json(&json!({
         "variant": value,
       }))
-    })?;
+    }).await?;
     Ok(res.into_inner())
   }
 }
