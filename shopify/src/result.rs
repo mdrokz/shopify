@@ -1,5 +1,7 @@
 use reqwest::StatusCode;
 use thiserror::Error;
+use anyhow::Result;
+
 
 #[derive(Error, Debug)]
 pub enum ShopifyError {
