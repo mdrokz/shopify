@@ -26,55 +26,55 @@ request_query! {
   }
 }
 
-pub trait OrderApi {
-  fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>>;
+// pub trait OrderApi {
+//   fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>>;
 
-  fn get(&self, id: i64) -> ShopifyResult<Order>;
+//   fn get(&self, id: i64) -> ShopifyResult<Order>;
 
-  fn create_fulfillment(
-    &self,
-    order_id: i64,
-    fulfillment: &NewFulfillment,
-  ) -> ShopifyResult<Fulfillment>;
+//   fn create_fulfillment(
+//     &self,
+//     order_id: i64,
+//     fulfillment: &NewFulfillment,
+//   ) -> ShopifyResult<Fulfillment>;
 
-  fn update_fulfillment(
-    &self,
-    order_id: i64,
-    fulfillment_id: i64,
-    fulfillment: &NewFulfillment,
-  ) -> ShopifyResult<Fulfillment>;
+//   fn update_fulfillment(
+//     &self,
+//     order_id: i64,
+//     fulfillment_id: i64,
+//     fulfillment: &NewFulfillment,
+//   ) -> ShopifyResult<Fulfillment>;
 
-  fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
+//   fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
 
-  fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
+//   fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
 
-  fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
-}
+//   fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment>;
+// }
 
-impl OrderApi for Client {
-  fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
+impl Client {
+  async fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
     shopify_wrap! {
       pub struct Res {
         orders: Vec<Order>,
       }
     }
 
-    let res: Res = self.request_with_params(Method::GET, "/admin/orders.json", params, std::convert::identity)?;
+    let res: Res = self.request_with_params(Method::GET, "/admin/orders.json", params, std::convert::identity).await?;
     Ok(res.into_inner())
   }
 
-  fn get(&self, id: i64) -> ShopifyResult<Order> {
+  async fn get_order(&self, id: i64) -> ShopifyResult<Order> {
     shopify_wrap! {
       pub struct Res {
         order: Order,
       }
     }
 
-    let res: Res = self.request(Method::GET, &format!("/admin/orders/{}.json", id), std::convert::identity)?;
+    let res: Res = self.request(Method::GET, &format!("/admin/orders/{}.json", id), std::convert::identity).await?;
     Ok(res.into_inner())
   }
 
-  fn create_fulfillment(
+  async fn create_order(
     &self,
     order_id: i64,
     fulfillment: &NewFulfillment,
@@ -87,11 +87,11 @@ impl OrderApi for Client {
     let path = format!("/admin/orders/{}/fulfillments.json", order_id);
     let res: Res = self.request(Method::POST, &path, move |b| {
       b.json(&json!({ "fulfillment": fulfillment }))
-    })?;
+    }).await?;
     Ok(res.into_inner())
   }
 
-  fn update_fulfillment(
+  async fn update_order(
     &self,
     order_id: i64,
     fulfillment_id: i64,
@@ -109,11 +109,11 @@ impl OrderApi for Client {
     );
     let res: Res = self.request(Method::PUT, &path, move |b| {
       b.json(&json!({ "fulfillment": fulfillment }))
-    })?;
+    }).await?;
     Ok(res.into_inner())
   }
 
-  fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  async fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -124,11 +124,11 @@ impl OrderApi for Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity)?;
+    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
     Ok(res.into_inner())
   }
 
-  fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  async fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -139,11 +139,11 @@ impl OrderApi for Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity)?;
+    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
     Ok(res.into_inner())
   }
 
-  fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  async fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -154,7 +154,7 @@ impl OrderApi for Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity)?;
+    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
     Ok(res.into_inner())
   }
 }
