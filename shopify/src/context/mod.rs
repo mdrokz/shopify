@@ -4,6 +4,9 @@ use reqwest::RequestBuilder;
 
 use self::types::ApiVersion;
 
+
+use anyhow::Result;
+
 #[derive(Debug, Clone)]
 pub struct Context {
   api_key: String,
