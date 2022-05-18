@@ -1,7 +1,7 @@
 use crate::pagination::Paginated;
 pub use reqwest::Method;
-use reqwest::blocking::Response;
-use reqwest::{blocking::Client as HttpClient, blocking::RequestBuilder, StatusCode, Url};
+use reqwest::Response;
+use reqwest::{Client as HttpClient, RequestBuilder, StatusCode, Url};
 use crate::result::*;
 use serde::Deserialize;
 use crate::types::{DateTime, Utc};
@@ -146,7 +146,7 @@ impl Client {
     })
   }
 
-  pub fn request_with_params<P, T, F>(
+  pub async fn request_with_params<P, T, F>(
     &self,
     method: Method,
     path: &str,
@@ -165,14 +165,14 @@ impl Client {
 
     b = bf(b);
 
-    let res = b.send()?;
+    let res = b.send().await?;
     let status = res.status();
     if !status.is_success() {
       if status == StatusCode::NOT_FOUND {
         return Err(ShopifyError::NotFound);
       }
 
-      let body = res.text()?;
+      let body = res.text().await?;
       return Err(ShopifyError::Request {
         path: path.to_owned(),
         status,
@@ -180,10 +180,10 @@ impl Client {
       });
     }
 
-    res.json().map_err(Into::into)
+    res.json().await.map_err(Into::into)
   }
 
-  pub fn request_with_params_paginated<P, T, F>(
+  pub async fn request_with_params_paginated<P, T, F>(
     &self,
     method: Method,
     path: &str,
@@ -202,7 +202,7 @@ impl Client {
 
     b = bf(b);
 
-    let res = b.send()?;
+    let res = b.send().await?;
     let status = res.status();
 
     if !status.is_success() {
@@ -210,7 +210,7 @@ impl Client {
         return Err(ShopifyError::NotFound);
       }
 
-      let body = res.text()?;
+      let body = res.text().await?;
       return Err(ShopifyError::Request {
         path: path.to_owned(),
         status,
@@ -221,15 +221,15 @@ impl Client {
     Ok(Paginated::from_res(res)?)
   }
 
-  pub fn request<T, F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<T>
+  pub async fn request<T, F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<T>
   where
     T: for<'de> Deserialize<'de>,
     F: FnOnce(RequestBuilder) -> RequestBuilder,
   {
-    self.request_with_params(method, path, &(), bf)
+    self.request_with_params(method, path, &(), bf).await
   }
 
-  pub fn request_paginated<T, F>(
+  pub async fn request_paginated<T, F>(
     &self,
     method: Method,
     path: &str,
@@ -239,10 +239,10 @@ impl Client {
     T: for<'de> Deserialize<'de>,
     F: FnOnce(RequestBuilder) -> RequestBuilder,
   {
-    self.request_with_params_paginated(method, path, &(), bf)
+    self.request_with_params_paginated(method, path, &(), bf).await
   }
 
-  pub fn request_raw<F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<Response>
+  pub async fn request_raw<F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<Response>
   where
     F: FnOnce(RequestBuilder) -> RequestBuilder,
   {
@@ -252,7 +252,7 @@ impl Client {
 
     b = bf(b);
 
-    b.send().map_err(Into::into)
+    b.send().await.map_err(Into::into)
   }
 }
 
