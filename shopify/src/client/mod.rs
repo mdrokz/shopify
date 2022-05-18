@@ -1,10 +1,11 @@
+use crate::context::Context;
 use crate::pagination::Paginated;
+use crate::result::*;
+use crate::types::{DateTime, Utc};
 pub use reqwest::Method;
 use reqwest::Response;
 use reqwest::{Client as HttpClient, RequestBuilder, StatusCode, Url};
-use crate::result::*;
 use serde::Deserialize;
-use crate::types::{DateTime, Utc};
 
 mod types;
 pub use self::types::*;
@@ -117,17 +118,15 @@ macro_rules! request_query {
 #[derive(Debug, Clone)]
 pub struct Client {
   base_url: Url,
-  api_key: String,
-  password: String,
+  context: Context,
   client: HttpClient,
 }
 
 impl Client {
-  pub fn new(base_url: &str, api_key: &str, password: &str) -> ShopifyResult<Self> {
+  pub fn new(base_url: &str, context: Context) -> ShopifyResult<Self> {
     Ok(Client {
       base_url: Url::parse(base_url)?,
-      api_key: api_key.to_owned(),
-      password: password.to_owned(),
+      context,
       client: HttpClient::new(),
     })
   }
@@ -135,13 +134,11 @@ impl Client {
   pub fn with_http_client(
     client: HttpClient,
     base_url: &str,
-    api_key: &str,
-    password: &str,
+    context: Context
   ) -> ShopifyResult<Self> {
     Ok(Client {
       base_url: Url::parse(base_url)?,
-      api_key: api_key.to_owned(),
-      password: password.to_owned(),
+      context,
       client: client,
     })
   }
@@ -161,7 +158,7 @@ impl Client {
     let mut url = self.base_url.join(path)?;
     url.query_pairs_mut().extend_pairs(params.as_query_pairs());
     let mut b = self.client.request(method, url);
-    b = b.basic_auth(self.api_key.clone(), Some(self.password.clone()));
+    b = self.context.authenticate(b);
 
     b = bf(b);
 
@@ -198,7 +195,7 @@ impl Client {
     let mut url = self.base_url.join(path)?;
     url.query_pairs_mut().extend_pairs(params.as_query_pairs());
     let mut b = self.client.request(method, url);
-    b = b.basic_auth(self.api_key.clone(), Some(self.password.clone()));
+    b = self.context.authenticate(b);
 
     b = bf(b);
 
@@ -239,7 +236,9 @@ impl Client {
     T: for<'de> Deserialize<'de>,
     F: FnOnce(RequestBuilder) -> RequestBuilder,
   {
-    self.request_with_params_paginated(method, path, &(), bf).await
+    self
+      .request_with_params_paginated(method, path, &(), bf)
+      .await
   }
 
   pub async fn request_raw<F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<Response>
@@ -248,7 +247,7 @@ impl Client {
   {
     let url = self.base_url.join(path)?;
     let mut b = self.client.request(method, url);
-    b = b.basic_auth(self.api_key.clone(), Some(self.password.clone()));
+    b = self.context.authenticate(b);
 
     b = bf(b);
 
