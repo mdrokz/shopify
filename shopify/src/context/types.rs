@@ -9,11 +9,11 @@
 /// `Nightly("unstable")`
 
 pub enum ApiVersion {
-  July21(String),    /// "2021-07",
-  October21(String), // "2021-10",
-  January22(String), // "2022-01",
-  April22(String),   // "2022-04",
-  Nightly(String),   // "unstable"
+  July21(String),
+  October21(String),
+  January22(String),
+  April22(String),
+  Nightly(String),
 }
 
 impl Default for ApiVersion {
