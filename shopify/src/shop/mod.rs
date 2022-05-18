@@ -14,9 +14,9 @@ pub trait ShopApi {
   fn get(&self) -> ShopifyResult<Shop>;
 }
 
-impl ShopApi for Client {
-  fn get(&self) -> ShopifyResult<Shop> {
-    let res: GetShop = self.request(Method::GET, "/admin/shop.json", std::convert::identity)?;
+impl Client {
+  pub async fn get_shop(&self) -> ShopifyResult<Shop> {
+    let res: GetShop = self.request(Method::GET, "/admin/shop.json", std::convert::identity).await?;
     Ok(res.into_inner())
   }
 }
