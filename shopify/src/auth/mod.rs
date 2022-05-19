@@ -10,16 +10,7 @@ mod types;
 pub use self::types::*;
 
 
-pub struct Query(String);
 
-trait X {}
-
-impl Into<Query> for HashMap<String,String> {
-
-    fn into(self) -> Query {
-        todo!()
-    } 
-}
 
 impl Client {
   pub async fn beginAuth(&self, shop: &str, redirectPath: &str, cookieJar: &mut CookieJar) {
