@@ -73,6 +73,7 @@ impl Context {
 
     Ok(Self {
       scopes,
+      access_token: access_token.to_string(),
       ..Default::default()
     })
   }
