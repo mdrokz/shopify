@@ -9,15 +9,15 @@ use anyhow::Result;
 
 #[derive(Debug, Clone)]
 pub struct Context {
-  api_key: String,
-  api_secret_key: String,
-  password: String,
-  access_token: String,
-  scopes: Vec<String>,
-  host_name: String,
-  api_version: ApiVersion,
-  is_embedded_app: bool,
-  is_private_app: bool,
+  pub api_key: String,
+  pub api_secret_key: String,
+  pub password: String,
+  pub access_token: String,
+  pub scopes: Vec<String>,
+  pub host_name: String,
+  pub api_version: ApiVersion,
+  pub is_embedded_app: bool,
+  pub is_private_app: bool,
 }
 
 impl Default for Context {
