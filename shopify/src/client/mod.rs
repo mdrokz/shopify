@@ -18,14 +18,14 @@ macro_rules! shopify_wrap {
       $key:ident: $inner_t:ty$(,)*
     }
   ) => {
-    use crate::client::ShopifyWarpper;
+    use crate::client::ShopifyWrapper;
 
     #[derive(Debug, Deserialize)]
     pub struct $t {
       $key: $inner_t,
     }
 
-    impl ShopifyWarpper<$inner_t> for $t {
+    impl ShopifyWrapper<$inner_t> for $t {
       fn into_inner(self) -> $inner_t {
         self.$key
       }
@@ -118,7 +118,7 @@ macro_rules! request_query {
 #[derive(Debug, Clone)]
 pub struct Client {
   base_url: Url,
-  context: Context,
+  pub context: Context,
   client: HttpClient,
 }
 
