@@ -12,6 +12,7 @@ pub mod fulfillment_service;
 pub mod inventory;
 pub mod order;
 pub mod context;
+pub mod auth;
 pub mod pagination;
 pub mod product;
 pub mod shop;
