@@ -4,11 +4,12 @@ use reqwest::RequestBuilder;
 
 use self::types::ApiVersion;
 
+use crate::session::{types::SessionStorage, MemorySession};
 
 use anyhow::Result;
 
 #[derive(Debug, Clone)]
-pub struct Context {
+pub struct Context<T: SessionStorage + Clone = MemorySession> {
   pub api_key: String,
   pub api_secret_key: String,
   pub password: String,
@@ -18,6 +19,7 @@ pub struct Context {
   pub api_version: ApiVersion,
   pub is_embedded_app: bool,
   pub is_private_app: bool,
+  pub session: T,
 }
 
 impl Default for Context {
@@ -35,6 +37,7 @@ impl Default for Context {
       api_version: Default::default(),
       is_embedded_app: true,
       is_private_app: false,
+      session: MemorySession::new(),
     }
   }
 }
