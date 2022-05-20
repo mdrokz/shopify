@@ -2,19 +2,22 @@ pub mod types;
 
 use std::cell::RefCell;
 use std::collections::HashSet;
+use std::rc::Rc;
 
 use uuid::Uuid;
 
 use self::types::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct MemorySession {
-  sessions: RefCell<HashSet<Session>>,
+  sessions: Rc<RefCell<HashSet<Session>>>,
 }
 
 impl SessionStorage for MemorySession {
   fn store_session(&mut self, session: Session) -> bool {
-    let sessions = self.sessions.get_mut();
+    let sessions = Rc::get_mut(&mut self.sessions)
+      .expect("failed to take get sessions")
+      .get_mut();
     sessions.insert(session)
   }
 
@@ -25,7 +28,9 @@ impl SessionStorage for MemorySession {
   }
 
   fn delete_session(&mut self, id: Uuid) -> bool {
-    let sessions = self.sessions.get_mut();
+    let sessions = Rc::get_mut(&mut self.sessions)
+      .expect("failed to take get sessions")
+      .get_mut();
 
     sessions.remove(&id)
   }
@@ -34,7 +39,7 @@ impl SessionStorage for MemorySession {
 impl MemorySession {
   pub fn new() -> Self {
     Self {
-      sessions: RefCell::new(HashSet::new()),
+      sessions: Rc::new(RefCell::new(HashSet::new())),
     }
   }
 }
