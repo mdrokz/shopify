@@ -124,7 +124,7 @@ pub struct Client {
 }
 
 impl Client {
-  pub fn new<T: SessionStorage + Clone>(base_url: &str, context: Context) -> ShopifyResult<Self> {
+  pub fn new(base_url: &str, context: Context) -> ShopifyResult<Self> {
     Ok(Client {
       base_url: Url::parse(base_url)?,
       context: context,
