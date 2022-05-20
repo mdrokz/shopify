@@ -10,33 +10,33 @@ pub trait SessionStorage {
 
 #[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
 pub struct AssociatedUser {
-  id: u32,
-  first_name: String,
-  last_name: String,
-  email: String,
-  email_verified: bool,
-  account_owner: bool,
-  locale: String,
-  collaborator: bool,
+  pub id: u64,
+  pub first_name: String,
+  pub last_name: String,
+  pub email: String,
+  pub email_verified: bool,
+  pub account_owner: bool,
+  pub locale: String,
+  pub collaborator: bool,
 }
 
 #[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
 pub struct OnlineAccessInfo {
-  expires_in: i32,
-  associated_user_scope: String,
-  associated_user: AssociatedUser,
+  pub expires_in: i64,
+  pub associated_user_scope: String,
+  pub associated_user: AssociatedUser,
 }
 
 #[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
 pub struct Session {
-  id: Uuid,
-  shop: String,
-  state: String,
-  is_online: bool,
-  scope: Option<String>,
-  expires: Option<DateTime<Utc>>,
-  access_token: Option<String>,
-  online_access_info: Option<OnlineAccessInfo>,
+  pub id: Uuid,
+  pub shop: String,
+  pub state: String,
+  pub is_online: bool,
+  pub scope: Option<String>,
+  pub expires: Option<DateTime<Utc>>,
+  pub access_token: Option<String>,
+  pub online_access_info: Option<OnlineAccessInfo>,
 }
 
 impl Borrow<Uuid> for Session {
@@ -61,7 +61,7 @@ impl Default for Session {
 }
 
 impl Session {
-  pub fn isActive(&self) -> bool {
+  pub fn is_active(&self) -> bool {
     true
   }
 
