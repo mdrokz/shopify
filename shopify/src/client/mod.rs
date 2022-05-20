@@ -1,6 +1,7 @@
 use crate::context::Context;
 use crate::pagination::Paginated;
 use crate::result::*;
+use crate::session::types::SessionStorage;
 use crate::types::{DateTime, Utc};
 pub use reqwest::Method;
 use reqwest::Response;
@@ -123,10 +124,10 @@ pub struct Client {
 }
 
 impl Client {
-  pub fn new(base_url: &str, context: Context) -> ShopifyResult<Self> {
+  pub fn new<T: SessionStorage + Clone>(base_url: &str, context: Context) -> ShopifyResult<Self> {
     Ok(Client {
       base_url: Url::parse(base_url)?,
-      context,
+      context: context,
       client: HttpClient::new(),
     })
   }
@@ -134,7 +135,7 @@ impl Client {
   pub fn with_http_client(
     client: HttpClient,
     base_url: &str,
-    context: Context
+    context: Context,
   ) -> ShopifyResult<Self> {
     Ok(Client {
       base_url: Url::parse(base_url)?,
@@ -241,13 +242,21 @@ impl Client {
       .await
   }
 
-  pub async fn request_raw<F>(&self, method: Method, path: &str, bf: F) -> ShopifyResult<Response>
+  pub async fn request_raw<F>(
+    &self,
+    method: Method,
+    path: &str,
+    bf: F,
+    authenticate: bool,
+  ) -> ShopifyResult<Response>
   where
     F: FnOnce(RequestBuilder) -> RequestBuilder,
   {
     let url = self.base_url.join(path)?;
     let mut b = self.client.request(method, url);
-    b = self.context.authenticate(b);
+    if authenticate {
+      b = self.context.authenticate(b);
+    }
 
     b = bf(b);
 
