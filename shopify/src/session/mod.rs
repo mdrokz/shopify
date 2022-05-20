@@ -1,8 +1,10 @@
 pub mod types;
 
-use std::cell::RefCell;
+// use std::cell::RefCell;
 use std::collections::HashSet;
-use std::rc::Rc;
+// use std::rc::Rc;
+
+use std::sync::{Arc, Mutex};
 
 use uuid::Uuid;
 
@@ -10,27 +12,23 @@ use self::types::*;
 
 #[derive(Debug, Clone)]
 pub struct MemorySession {
-  sessions: Rc<RefCell<HashSet<Session>>>,
+  sessions: Arc<Mutex<HashSet<Session>>>,
 }
 
 impl SessionStorage for MemorySession {
   fn store_session(&mut self, session: Session) -> bool {
-    let sessions = Rc::get_mut(&mut self.sessions)
-      .expect("failed to take get sessions")
-      .get_mut();
+    let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
+    // let mut sessions = *session_guard;
     sessions.insert(session)
   }
 
   fn load_session(&mut self, id: Uuid) -> Option<Session> {
-    let sessions = self.sessions.borrow();
-
+    let sessions = self.sessions.lock().expect("failed to get session lock");
     sessions.get(&id).cloned()
   }
 
   fn delete_session(&mut self, id: Uuid) -> bool {
-    let sessions = Rc::get_mut(&mut self.sessions)
-      .expect("failed to take get sessions")
-      .get_mut();
+    let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
 
     sessions.remove(&id)
   }
@@ -39,7 +37,7 @@ impl SessionStorage for MemorySession {
 impl MemorySession {
   pub fn new() -> Self {
     Self {
-      sessions: Rc::new(RefCell::new(HashSet::new())),
+      sessions: Arc::new(Mutex::new(HashSet::new())),
     }
   }
 }
