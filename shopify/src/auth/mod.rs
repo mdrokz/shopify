@@ -25,7 +25,7 @@ impl Client {
     redirect_path: &str,
     cookie_jar: &mut CookieJar,
   ) -> Result<String> {
-    let key = Key::from(self.context.api_secret_key.as_bytes());
+    let key = Key::derive_from(self.context.api_secret_key.as_bytes());
 
     let session = Session::new(Uuid::new_v4(), shop, "", true);
 
@@ -59,7 +59,7 @@ impl Client {
     auth_query: AuthQuery,
     cookie_jar: &mut CookieJar,
   ) -> Result<Session> {
-    let key = Key::from(self.context.api_secret_key.as_bytes());
+    let key = Key::derive_from(self.context.api_secret_key.as_bytes());
 
     let session_cookie = cookie_jar
       .get(SESSION_KEY)
