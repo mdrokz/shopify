@@ -37,7 +37,7 @@ impl SessionStorage for MemorySession {
 impl MemorySession {
   pub fn new() -> Self {
     Self {
-      sessions: Arc::new(Mutex::new(HashSet::new())),
+      sessions: Arc::new(Mutex::new(HashMap::new())),
     }
   }
 }
