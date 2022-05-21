@@ -2,7 +2,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use chrono::{DateTime, Duration as ChronoDuration, Utc};
+use chrono::{Duration as ChronoDuration, Utc};
 use cookie::time::{Duration, OffsetDateTime};
 use cookie::{Cookie, CookieJar, Key};
 use uuid::Uuid;
@@ -119,7 +119,7 @@ impl Client {
       .secure(true)
       .same_site(cookie::SameSite::Lax)
       .expires(OffsetDateTime::from_unix_timestamp(
-        session_expiration.timestamp_millis(),
+        session_expiration.timestamp(),
       )?)
       .finish();
 
