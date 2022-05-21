@@ -42,7 +42,7 @@ impl Client {
     let query: Query = map! {
         "client_id" => self.context.api_key.clone(),
         "scope" => self.context.scopes.join(","),
-        "redirect_uri" => format!("https://{}{}",shop,redirect_path),
+        "redirect_uri" => format!("https://{}{}",self.context.host_name,redirect_path),
         "state" => "".to_string(),
         "grant_options[]" => "per_user".to_string()
     }

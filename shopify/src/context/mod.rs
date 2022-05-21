@@ -46,6 +46,7 @@ impl Context {
   pub fn initialize(
     api_key: &str,
     api_secret_key: &str,
+    host_name: &str,
     password: &str,
     scopes: Vec<String>,
   ) -> Result<Self, String> {
@@ -57,6 +58,10 @@ impl Context {
       return Err(String::from("SHOPIFY_API_SECRET is missing"));
     }
 
+    if host_name.is_empty() {
+      return Err(String::from("SHOPIFY_HOST_NAME is missing"));
+    }
+
     if password.is_empty() {
       return Err(String::from("PASSWORD is missing"));
     }
@@ -64,6 +69,7 @@ impl Context {
     Ok(Self {
       api_key: api_key.to_string(),
       api_secret_key: api_secret_key.to_string(),
+      host_name: host_name.to_string(),
       scopes,
       ..Default::default()
     })
