@@ -43,8 +43,8 @@ impl Client {
         "client_id" => self.context.api_key.clone(),
         "scope" => self.context.scopes.join(","),
         "redirect_uri" => format!("https://{}{}",self.context.host_name,redirect_path),
-        "state" => "".to_string(),
-        "grant_options[]" => "per_user".to_string()
+        "state" => "test".to_string(),
+        "grant_options[]" => "per-user".to_string()
     }
     .into();
 
