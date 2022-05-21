@@ -61,7 +61,7 @@ impl Client {
   ) -> Result<Session> {
     let key = Key::derive_from(self.context.api_secret_key.as_bytes());
 
-    let session_cookie = cookie_jar
+    let session_cookie = cookie_jar.signed_mut(&key)
       .get(SESSION_KEY)
       .expect("Failed to get current session cookie");
 
