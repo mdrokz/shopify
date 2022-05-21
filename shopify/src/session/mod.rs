@@ -1,7 +1,7 @@
 pub mod types;
 
 // use std::cell::RefCell;
-use std::collections::HashSet;
+use std::collections::HashMap;
 // use std::rc::Rc;
 
 use std::sync::{Arc, Mutex};
@@ -12,14 +12,14 @@ use self::types::*;
 
 #[derive(Debug, Clone)]
 pub struct MemorySession {
-  sessions: Arc<Mutex<HashSet<Session>>>,
+  sessions: Arc<Mutex<HashMap<Uuid, Session>>>,
 }
 
 impl SessionStorage for MemorySession {
   fn store_session(&mut self, session: Session) -> bool {
     let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
     // let mut sessions = *session_guard;
-    sessions.insert(session)
+    sessions.insert(session.id, session).map_or(false, |x| true)
   }
 
   fn load_session(&mut self, id: Uuid) -> Option<Session> {
@@ -30,7 +30,7 @@ impl SessionStorage for MemorySession {
   fn delete_session(&mut self, id: Uuid) -> bool {
     let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
 
-    sessions.remove(&id)
+    sessions.remove(&id).map_or(false, |x| true)
   }
 }
 
