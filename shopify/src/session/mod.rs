@@ -19,7 +19,7 @@ impl SessionStorage for MemorySession {
   fn store_session(&mut self, session: Session) -> bool {
     let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
     // let mut sessions = *session_guard;
-    sessions.insert(session.id, session).map_or(false, |x| true)
+    sessions.insert(session.id, session).map_or(false, |_| true)
   }
 
   fn load_session(&mut self, id: Uuid) -> Option<Session> {
@@ -30,7 +30,7 @@ impl SessionStorage for MemorySession {
   fn delete_session(&mut self, id: Uuid) -> bool {
     let sessions = &mut *self.sessions.lock().expect("failed to get session lock");
 
-    sessions.remove(&id).map_or(false, |x| true)
+    sessions.remove(&id).map_or(false, |_| true)
   }
 }
 
