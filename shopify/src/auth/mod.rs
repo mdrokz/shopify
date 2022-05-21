@@ -49,7 +49,7 @@ impl Client {
     .into();
 
     Ok(format!(
-      "https://${}/admin/oauth/authorize?{}",
+      "https://{}/admin/oauth/authorize?{}",
       shop, query.0
     ))
   }
