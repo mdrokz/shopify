@@ -18,18 +18,28 @@ macro_rules! builder {
             )*
         }
 
-        impl $o {
-          $(
-            pub fn $v(&mut self,$v: $s) -> Self {
-              self.$v = $v;
+        pub struct Builder {
+          value: $o
+        }
 
-              self.clone()
+        impl Builder {
+          $(
+            pub fn $v(mut self,$v: $s) -> Builder {
+              self.value.$v = $v;
+
+              self
             }
           )*
 
+          pub fn build(self) -> $o {
+            self.value
+          }
+
           #[inline]
-          pub fn initialize() -> Self {
-            Default::default()
+          pub fn new() -> Self {
+           Builder {
+             value: Default::default()
+           }
           }
         }
   };
