@@ -1,4 +1,3 @@
-use std::future::Future;
 
 use crate::client::{Client, Method};
 use crate::result::*;
