@@ -1,20 +1,22 @@
+use anyhow::Result;
 use reqwest::StatusCode;
 use thiserror::Error;
-use anyhow::Result;
-
 
 #[derive(Error, Debug)]
 pub enum ShopifyError {
   #[error("not found")]
   NotFound,
 
-  #[error(
-    "request error: path = '{path}', status = '{status}', body = '{body}'"
-  )]
+  #[error("request error: path = '{path}', status = '{status}', body = '{body}'")]
   Request {
     path: String,
     status: StatusCode,
     body: String,
+  },
+
+  #[error("context is missing these values {missing_values}")]
+  ContextMissingValues {
+    missing_values: String
   },
 
   #[error("invalid response")]
