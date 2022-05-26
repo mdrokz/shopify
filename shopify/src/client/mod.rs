@@ -159,7 +159,7 @@ impl Client {
     let mut url = self.base_url.join(path)?;
     url.query_pairs_mut().extend_pairs(params.as_query_pairs());
     let mut b = self.client.request(method, url);
-    b = self.context.authenticate(b);
+    b = self.context.authenticate(b)?;
 
     b = bf(b);
 
@@ -196,7 +196,7 @@ impl Client {
     let mut url = self.base_url.join(path)?;
     url.query_pairs_mut().extend_pairs(params.as_query_pairs());
     let mut b = self.client.request(method, url);
-    b = self.context.authenticate(b);
+    b = self.context.authenticate(b)?;
 
     b = bf(b);
 
@@ -255,7 +255,7 @@ impl Client {
     let url = self.base_url.join(path)?;
     let mut b = self.client.request(method, url);
     if authenticate {
-      b = self.context.authenticate(b);
+      b = self.context.authenticate(b)?;
     }
 
     b = bf(b);

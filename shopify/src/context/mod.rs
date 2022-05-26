@@ -4,22 +4,48 @@ use reqwest::RequestBuilder;
 
 use self::types::ApiVersion;
 
-use crate::session::{types::SessionStorage, MemorySession};
+use crate::{
+  result::{ShopifyError, ShopifyResult},
+  session::MemorySession,
+};
 
-use anyhow::Result;
+macro_rules! builder {
+  ($o: ident,$($v: ident => $s: path),*) => {
+    #[derive(Debug,Clone)]
+        pub struct $o {
+            $(
+                pub $v: $s,
+            )*
+        }
 
-#[derive(Debug, Clone)]
-pub struct Context<T: SessionStorage + Clone = MemorySession> {
-  pub api_key: String,
-  pub api_secret_key: String,
-  pub password: String,
-  pub access_token: String,
-  pub scopes: Vec<String>,
-  pub host_name: String,
-  pub api_version: ApiVersion,
-  pub is_embedded_app: bool,
-  pub is_private_app: bool,
-  pub session: T,
+        impl $o {
+          $(
+            pub fn $v(&mut self,$v: $s) -> Self {
+              self.$v = $v;
+
+              self.clone()
+            }
+          )*
+
+          #[inline]
+          pub fn initialize() -> Self {
+            Default::default()
+          }
+        }
+  };
+}
+
+builder! { Context,
+   api_key => String,
+   api_secret_key => String,
+   password => String,
+   access_token => String,
+   scopes => Vec<String>,
+   host_name => String,
+   api_version => ApiVersion,
+   is_embedded_app => bool,
+   is_private_app => bool,
+   session => MemorySession
 }
 
 impl Default for Context {
@@ -43,51 +69,31 @@ impl Default for Context {
 }
 
 impl Context {
-  pub fn initialize(
-    api_key: &str,
-    api_secret_key: &str,
-    host_name: &str,
-    password: &str,
-    scopes: Vec<String>,
-  ) -> Result<Self, String> {
-    if api_key.is_empty() {
-      return Err(String::from("SHOPIFY_API_KEY is missing"));
+  pub fn authenticate(&self, b: RequestBuilder) -> ShopifyResult<RequestBuilder> {
+    let mut errors = String::new();
+
+    if self.api_key.is_empty() {
+      errors.push_str(&format!("SHOPIFY_API_KEY "));
     }
 
-    if api_secret_key.is_empty() {
-      return Err(String::from("SHOPIFY_API_SECRET is missing"));
+    if self.api_secret_key.is_empty() {
+      errors.push_str(&format!("SHOPIFY_API_SECRET "));
     }
 
-    if host_name.is_empty() {
-      return Err(String::from("SHOPIFY_HOST_NAME is missing"));
+    if self.host_name.is_empty() {
+      errors.push_str(&format!("SHOPIFY_HOST_NAME "));
     }
 
-    if password.is_empty() {
-      return Err(String::from("PASSWORD is missing"));
+    if self.password.is_empty() {
+      errors.push_str(&format!("PASSWORD "));
     }
 
-    Ok(Self {
-      api_key: api_key.to_string(),
-      api_secret_key: api_secret_key.to_string(),
-      host_name: host_name.to_string(),
-      scopes,
-      ..Default::default()
-    })
-  }
-
-  pub fn initialize_with_token(access_token: &str, scopes: Vec<String>) -> Result<Self, String> {
-    if access_token.is_empty() {
-      return Err(String::from("ACCESS_TOKEN is missing"));
+    if errors.len() > 0 {
+      return Err(ShopifyError::ContextMissingValues {
+        missing_values: errors,
+      });
     }
 
-    Ok(Self {
-      scopes,
-      access_token: access_token.to_string(),
-      ..Default::default()
-    })
-  }
-
-  pub fn authenticate(&self, b: RequestBuilder) -> RequestBuilder {
     let mut b = b;
     if !self.access_token.is_empty() {
       b = b.header("X-Shopify-Access-Token", &self.access_token);
@@ -95,6 +101,6 @@ impl Context {
       b = b.basic_auth(&self.api_key, Some(&self.password));
     }
 
-    b
+    Ok(b)
   }
 }
