@@ -31,7 +31,7 @@ impl Client {
 
     let res: Paginated<Res> = self.request_with_params_paginated(
       Method::GET,
-      "/admin/api/2020-07/variants.json",
+      &format!("/admin/api/{}/variants.json",self.context.api_version),
       params,
       std::convert::identity,
     ).await?;
@@ -46,7 +46,7 @@ impl Client {
     }
     let res: Paginated<Res> = self.request_with_params_paginated(
       Method::GET,
-      "/admin/api/2020-07/variants.json",
+      &format!("/admin/api/{}/variants.json",self.context.api_version),
       params,
       std::convert::identity,
     ).await?;

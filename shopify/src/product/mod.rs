@@ -14,14 +14,11 @@ request_query! {
   }
 }
 
-pub trait ProductApi {
-  fn list(&self, params: &GetProductListParams) -> ShopifyResult<Paginated<Vec<Product>>>;
-  fn list_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Product>>>;
-  fn update<P: Serialize>(&self, id: i64, value: P) -> ShopifyResult<Product>;
-}
-
 impl Client {
-  async fn list_product(&self, params: &GetProductListParams) -> ShopifyResult<Paginated<Vec<Product>>> {
+  async fn list_product(
+    &self,
+    params: &GetProductListParams,
+  ) -> ShopifyResult<Paginated<Vec<Product>>> {
     shopify_wrap! {
       pub struct Res {
         products: Vec<Product>,
@@ -31,7 +28,7 @@ impl Client {
     let res: Paginated<Res> = self
       .request_with_params_paginated(
         Method::GET,
-        "/admin/api/2020-07/products.json",
+        &format!("/admin/api/{}/products.json", self.context.api_version),
         params,
         std::convert::identity,
       )
@@ -51,7 +48,7 @@ impl Client {
     let res: Paginated<Res> = self
       .request_with_params_paginated(
         Method::GET,
-        "/admin/api/2020-07/products.json",
+        &format!("/admin/api/{}/products.json", self.context.api_version),
         params,
         std::convert::identity,
       )
@@ -66,7 +63,10 @@ impl Client {
       }
     }
 
-    let path = format!("/admin/api/2020-07/products/{}.json", id);
+    let path = format!(
+      "/admin/api/{}/products/{}.json",
+      self.context.api_version, id
+    );
     let res: Res = self
       .request(Method::PUT, &path, move |b| {
         b.json(&json!({
