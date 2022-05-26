@@ -1,4 +1,4 @@
-use std::fmt::{Display,Formatter};
+use std::fmt::{Display, Formatter};
 
 /// `July21("2021-07")`
 ///
@@ -23,14 +23,14 @@ pub enum ApiVersion {
 }
 
 impl Display for ApiVersion {
-  fn fmt(&self, f: &mut Formatter<'_>) -> Result<(),std::fmt::Error> {
+  fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
     match self {
-      ApiVersion::July20(v) => write!(f, "{}", v),
-      ApiVersion::July21(v) => write!(f, "{}", v),
-      ApiVersion::October21(v) => write!(f, "{}", v),
-      ApiVersion::January22(v) => write!(f, "{}", v),
-      ApiVersion::April22(v) => write!(f, "{}", v),
-      ApiVersion::Nightly(v) => write!(f, "{}", v),
+      ApiVersion::July20(v) => write!(f, "{}", v)?,
+      ApiVersion::July21(v) => write!(f, "{}", v)?,
+      ApiVersion::October21(v) => write!(f, "{}", v)?,
+      ApiVersion::January22(v) => write!(f, "{}", v)?,
+      ApiVersion::April22(v) => write!(f, "{}", v)?,
+      ApiVersion::Nightly(v) => write!(f, "{}", v)?,
     };
 
     Ok(())
