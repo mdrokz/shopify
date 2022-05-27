@@ -1,4 +1,5 @@
 use crate::client::{Client, Method};
+use crate::order::Order;
 use crate::result::*;
 
 mod types;
@@ -52,8 +53,17 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_customer_orders(&self,id: i64) -> ShopifyResult<()> {
-      Ok(())
+  async fn get_customer_orders(&self,id: i64) -> ShopifyResult<Vec<Order>> {
+    shopify_wrap! {
+        pub struct Res {
+          orders: Vec<Order>,
+        }
+      }
+      let path = format!("/admin/{}/customers/{}/orders.json", self.context.api_version, id);
+      let res: Res = self
+        .request(Method::GET, &path, std::convert::identity)
+        .await?;
+      Ok(res.into_inner())
   }
 
 }
