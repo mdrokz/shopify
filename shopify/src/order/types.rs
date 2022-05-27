@@ -15,12 +15,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Order {
-  #[serde(rename = "orders")]
-  pub orders: Vec<OrderElement>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct OrderElement {
   #[serde(rename = "id")]
   pub id: i64,
 
