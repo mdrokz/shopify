@@ -25,9 +25,13 @@ use serde::{Deserialize, Serialize};
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CustomerCount {
+    pub count: i64
+}
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct CustomerParams {
+pub struct CustomerArg {
     #[serde(rename = "first_name")]
     pub first_name: String,
 
@@ -44,11 +48,11 @@ pub struct CustomerParams {
     pub verified_email: bool,
 
     #[serde(rename = "addresses")]
-    pub addresses: Vec<AddressParams>,
+    pub addresses: Vec<AddressArg>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct AddressParams {
+pub struct AddressArg {
     #[serde(rename = "address1")]
     pub address1: String,
 
