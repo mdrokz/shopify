@@ -1,264 +1,833 @@
-use crate::types::{DateTime, Utc, Value};
+// Example code that deserializes and serializes the model.
+// extern crate serde;
+// #[macro_use]
+// extern crate serde_derive;
+// extern crate serde_json;
+//
+// use generated_module::[object Object];
+//
+// fn main() {
+//     let json = r#"{"answer": 42}"#;
+//     let model: [object Object] = serde_json::from_str(&json).unwrap();
+// }
 
-#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum FulfillmentStatus {
-  Fulfilled,
-  Partial,
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Order {
+  #[serde(rename = "orders")]
+  pub orders: Vec<OrderElement>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum FinancialStatus {
-  Pending,
-  Authorized,
-  PartiallyPaid,
-  Paid,
-  PartiallyRefunded,
-  Refunded,
-  Voided,
-}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct OrderElement {
+  #[serde(rename = "id")]
+  pub id: i64,
 
-#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum ShipmentStatus {
-  Confirmed,
-  InTransit,
-  OutForDelivery,
-  AttemptedDelivery,
-  Delivered,
-  Failure,
-  LabelPrinted,
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "app_id")]
+  pub app_id: Option<serde_json::Value>,
+
+  #[serde(rename = "browser_ip")]
+  pub browser_ip: String,
+
+  #[serde(rename = "buyer_accepts_marketing")]
+  pub buyer_accepts_marketing: bool,
+
+  #[serde(rename = "cancel_reason")]
+  pub cancel_reason: Option<serde_json::Value>,
+
+  #[serde(rename = "cancelled_at")]
+  pub cancelled_at: Option<serde_json::Value>,
+
+  #[serde(rename = "cart_token")]
+  pub cart_token: String,
+
+  #[serde(rename = "checkout_id")]
+  pub checkout_id: i64,
+
+  #[serde(rename = "checkout_token")]
+  pub checkout_token: String,
+
+  #[serde(rename = "client_details")]
+  pub client_details: ClientDetails,
+
+  #[serde(rename = "closed_at")]
+  pub closed_at: Option<serde_json::Value>,
+
+  #[serde(rename = "confirmed")]
+  pub confirmed: bool,
+
+  #[serde(rename = "contact_email")]
+  pub contact_email: String,
+
+  #[serde(rename = "created_at")]
+  pub created_at: String,
+
+  #[serde(rename = "currency")]
+  pub currency: Currency,
+
+  #[serde(rename = "customer_locale")]
+  pub customer_locale: Option<serde_json::Value>,
+
+  #[serde(rename = "device_id")]
+  pub device_id: Option<serde_json::Value>,
+
+  #[serde(rename = "discount_codes")]
+  pub discount_codes: Vec<DiscountCode>,
+
+  #[serde(rename = "email")]
+  pub email: String,
+
+  #[serde(rename = "financial_status")]
+  pub financial_status: String,
+
+  #[serde(rename = "fulfillment_status")]
+  pub fulfillment_status: Option<serde_json::Value>,
+
+  #[serde(rename = "gateway")]
+  pub gateway: String,
+
+  #[serde(rename = "landing_site")]
+  pub landing_site: String,
+
+  #[serde(rename = "landing_site_ref")]
+  pub landing_site_ref: String,
+
+  #[serde(rename = "location_id")]
+  pub location_id: Option<serde_json::Value>,
+
+  #[serde(rename = "name")]
+  pub name: String,
+
+  #[serde(rename = "note")]
+  pub note: Option<serde_json::Value>,
+
+  #[serde(rename = "note_attributes")]
+  pub note_attributes: Vec<NoteAttribute>,
+
+  #[serde(rename = "number")]
+  pub number: i64,
+
+  #[serde(rename = "order_number")]
+  pub order_number: i64,
+
+  #[serde(rename = "order_status_url")]
+  pub order_status_url: String,
+
+  #[serde(rename = "payment_gateway_names")]
+  pub payment_gateway_names: Vec<String>,
+
+  #[serde(rename = "phone")]
+  pub phone: String,
+
+  #[serde(rename = "presentment_currency")]
+  pub presentment_currency: Currency,
+
+  #[serde(rename = "processed_at")]
+  pub processed_at: String,
+
+  #[serde(rename = "processing_method")]
+  pub processing_method: String,
+
+  #[serde(rename = "reference")]
+  pub reference: String,
+
+  #[serde(rename = "referring_site")]
+  pub referring_site: String,
+
+  #[serde(rename = "source_identifier")]
+  pub source_identifier: String,
+
+  #[serde(rename = "source_name")]
+  pub source_name: String,
+
+  #[serde(rename = "source_url")]
+  pub source_url: Option<serde_json::Value>,
+
+  #[serde(rename = "subtotal_price")]
+  pub subtotal_price: String,
+
+  #[serde(rename = "subtotal_price_set")]
+  pub subtotal_price_set: Set,
+
+  #[serde(rename = "tags")]
+  pub tags: String,
+
+  #[serde(rename = "tax_lines")]
+  pub tax_lines: Vec<TaxLine>,
+
+  #[serde(rename = "taxes_included")]
+  pub taxes_included: bool,
+
+  #[serde(rename = "test")]
+  pub test: bool,
+
+  #[serde(rename = "token")]
+  pub token: String,
+
+  #[serde(rename = "total_discounts")]
+  pub total_discounts: String,
+
+  #[serde(rename = "total_discounts_set")]
+  pub total_discounts_set: Set,
+
+  #[serde(rename = "total_line_items_price")]
+  pub total_line_items_price: String,
+
+  #[serde(rename = "total_line_items_price_set")]
+  pub total_line_items_price_set: Set,
+
+  #[serde(rename = "total_price")]
+  pub total_price: String,
+
+  #[serde(rename = "total_price_set")]
+  pub total_price_set: Set,
+
+  #[serde(rename = "total_price_usd")]
+  pub total_price_usd: String,
+
+  #[serde(rename = "total_shipping_price_set")]
+  pub total_shipping_price_set: Set,
+
+  #[serde(rename = "total_tax")]
+  pub total_tax: String,
+
+  #[serde(rename = "total_tax_set")]
+  pub total_tax_set: Set,
+
+  #[serde(rename = "total_tip_received")]
+  pub total_tip_received: String,
+
+  #[serde(rename = "total_weight")]
+  pub total_weight: i64,
+
+  #[serde(rename = "updated_at")]
+  pub updated_at: String,
+
+  #[serde(rename = "user_id")]
+  pub user_id: Option<serde_json::Value>,
+
+  #[serde(rename = "billing_address")]
+  pub billing_address: Address,
+
+  #[serde(rename = "customer")]
+  pub customer: Customer,
+
+  #[serde(rename = "discount_applications")]
+  pub discount_applications: Vec<DiscountApplication>,
+
+  #[serde(rename = "fulfillments")]
+  pub fulfillments: Vec<Fulfillment>,
+
+  #[serde(rename = "line_items")]
+  pub line_items: Vec<LineItem>,
+
+  #[serde(rename = "payment_details")]
+  pub payment_details: PaymentDetails,
+
+  #[serde(rename = "refunds")]
+  pub refunds: Vec<Refund>,
+
+  #[serde(rename = "shipping_address")]
+  pub shipping_address: Address,
+
+  #[serde(rename = "shipping_lines")]
+  pub shipping_lines: Vec<ShippingLine>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Address {
+  #[serde(rename = "first_name")]
   pub first_name: Option<String>,
+
+  #[serde(rename = "address1")]
   pub address1: String,
-  pub phone: Option<String>,
+
+  #[serde(rename = "phone")]
+  pub phone: String,
+
+  #[serde(rename = "city")]
   pub city: String,
-  pub zip: Option<String>,
-  pub province: Option<String>,
+
+  #[serde(rename = "zip")]
+  pub zip: String,
+
+  #[serde(rename = "province")]
+  pub province: String,
+
+  #[serde(rename = "country")]
   pub country: String,
+
+  #[serde(rename = "last_name")]
   pub last_name: Option<String>,
-  pub address2: Option<String>,
-  pub company: Option<String>,
+
+  #[serde(rename = "address2")]
+  pub address2: String,
+
+  #[serde(rename = "company")]
+  pub company: Option<serde_json::Value>,
+
+  #[serde(rename = "latitude")]
   pub latitude: Option<f64>,
+
+  #[serde(rename = "longitude")]
   pub longitude: Option<f64>,
+
+  #[serde(rename = "name")]
   pub name: String,
-  pub country_code: Option<String>,
-  pub province_code: Option<String>,
+
+  #[serde(rename = "country_code")]
+  pub country_code: String,
+
+  #[serde(rename = "province_code")]
+  pub province_code: String,
+
+  #[serde(rename = "id")]
+  pub id: Option<i64>,
+
+  #[serde(rename = "customer_id")]
+  pub customer_id: Option<i64>,
+
+  #[serde(rename = "country_name")]
+  pub country_name: Option<String>,
+
+  #[serde(rename = "default")]
+  pub address_default: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientDetails {
-  browser_ip: Option<String>,
-  accept_language: Option<String>,
-  user_agent: Option<String>,
-  session_hash: Option<Value>,
-  browser_width: Option<i64>,
-  browser_height: Option<i64>,
+  #[serde(rename = "accept_language")]
+  pub accept_language: Option<serde_json::Value>,
+
+  #[serde(rename = "browser_height")]
+  pub browser_height: Option<serde_json::Value>,
+
+  #[serde(rename = "browser_ip")]
+  pub browser_ip: String,
+
+  #[serde(rename = "browser_width")]
+  pub browser_width: Option<serde_json::Value>,
+
+  #[serde(rename = "session_hash")]
+  pub session_hash: Option<serde_json::Value>,
+
+  #[serde(rename = "user_agent")]
+  pub user_agent: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Customer {
+  #[serde(rename = "id")]
   pub id: i64,
-  pub email: Option<String>,
+
+  #[serde(rename = "email")]
+  pub email: String,
+
+  #[serde(rename = "accepts_marketing")]
   pub accepts_marketing: bool,
+
+  #[serde(rename = "created_at")]
   pub created_at: String,
+
+  #[serde(rename = "updated_at")]
   pub updated_at: String,
-  pub first_name: Option<String>,
-  pub last_name: Option<String>,
-  pub orders_count: i64,
-  pub state: String,
-  pub total_spent: String,
-  pub last_order_id: Option<i64>,
-  pub note: Value,
-  pub verified_email: bool,
-  pub multipass_identifier: Value,
-  pub tax_exempt: bool,
-  pub phone: Option<String>,
-  pub tags: String,
-  pub last_order_name: Option<String>,
-  pub default_address: Option<DefaultAddress>,
-}
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DefaultAddress {
-  pub id: i64,
-  pub customer_id: i64,
-  pub first_name: Option<String>,
+  #[serde(rename = "first_name")]
+  pub first_name: String,
+
+  #[serde(rename = "last_name")]
   pub last_name: String,
-  pub company: Option<String>,
-  pub address1: String,
-  pub address2: Option<String>,
-  pub city: String,
-  pub province: Option<String>,
-  pub country: String,
-  pub zip: Option<String>,
-  pub phone: Option<String>,
-  pub name: String,
-  pub province_code: Option<String>,
-  pub country_code: String,
-  pub country_name: String,
-  pub default: bool,
+
+  #[serde(rename = "orders_count")]
+  pub orders_count: i64,
+
+  #[serde(rename = "state")]
+  pub state: String,
+
+  #[serde(rename = "total_spent")]
+  pub total_spent: String,
+
+  #[serde(rename = "last_order_id")]
+  pub last_order_id: i64,
+
+  #[serde(rename = "note")]
+  pub note: Option<serde_json::Value>,
+
+  #[serde(rename = "verified_email")]
+  pub verified_email: bool,
+
+  #[serde(rename = "multipass_identifier")]
+  pub multipass_identifier: Option<serde_json::Value>,
+
+  #[serde(rename = "tax_exempt")]
+  pub tax_exempt: bool,
+
+  #[serde(rename = "phone")]
+  pub phone: String,
+
+  #[serde(rename = "tags")]
+  pub tags: String,
+
+  #[serde(rename = "last_order_name")]
+  pub last_order_name: String,
+
+  #[serde(rename = "currency")]
+  pub currency: Currency,
+
+  #[serde(rename = "accepts_marketing_updated_at")]
+  pub accepts_marketing_updated_at: String,
+
+  #[serde(rename = "marketing_opt_in_level")]
+  pub marketing_opt_in_level: Option<serde_json::Value>,
+
+  #[serde(rename = "tax_exemptions")]
+  pub tax_exemptions: Vec<Option<serde_json::Value>>,
+
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "default_address")]
+  pub default_address: Address,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Property {
-  pub name: String,
-  pub value: Option<String>,
-}
+pub struct DiscountApplication {
+  #[serde(rename = "target_type")]
+  pub target_type: String,
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct LineItems {
-  pub id: i64,
-  pub variant_id: Option<i64>,
-  pub title: String,
-  pub quantity: i64,
-  pub price: String,
-  pub grams: i64,
-  pub sku: Option<String>,
-  pub variant_title: Option<String>,
-  pub vendor: Option<String>,
-  pub fulfillment_service: String,
-  pub product_id: Option<i64>,
-  pub requires_shipping: bool,
-  pub taxable: bool,
-  pub gift_card: bool,
-  pub name: String,
-  pub variant_inventory_management: Option<String>,
-  pub properties: Vec<Property>,
-  pub product_exists: bool,
-  pub fulfillable_quantity: i64,
-  pub total_discount: String,
-  pub fulfillment_status: Option<FulfillmentStatus>,
-  pub tax_lines: Vec<TaxLines>,
-  pub origin_location: Option<Location>,
-  pub destination_location: Option<Location>,
-}
+  #[serde(rename = "type")]
+  pub discount_application_type: String,
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Location {
-  id: i64,
-  country_code: String,
-  province_code: String,
-  name: String,
-  address1: String,
-  address2: Option<String>,
-  city: String,
-  zip: String,
+  #[serde(rename = "value")]
+  pub value: String,
+
+  #[serde(rename = "value_type")]
+  pub value_type: String,
+
+  #[serde(rename = "allocation_method")]
+  pub allocation_method: String,
+
+  #[serde(rename = "target_selection")]
+  pub target_selection: String,
+
+  #[serde(rename = "code")]
+  pub code: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscountCode {
-  pub amount: String,
+  #[serde(rename = "code")]
   pub code: String,
-  #[serde(rename = "type")]
-  pub type_: String,
-}
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Order {
-  pub id: i64,
-  pub email: Option<String>,
-  pub closed_at: Option<DateTime<Utc>>,
-  pub created_at: DateTime<Utc>,
-  pub updated_at: DateTime<Utc>,
-  pub number: i64,
-  pub note: Option<String>,
-  pub token: String,
-  pub gateway: Option<String>,
-  pub test: bool,
-  pub total_price: String,
-  pub subtotal_price: String,
-  pub total_weight: Option<i64>,
-  pub total_tax: String,
-  pub taxes_included: bool,
-  pub currency: String,
-  pub financial_status: FinancialStatus,
-  pub confirmed: bool,
-  pub total_discounts: String,
-  pub total_line_items_price: String,
-  pub cart_token: Option<String>,
-  pub buyer_accepts_marketing: bool,
-  pub name: String,
-  pub referring_site: Value,
-  pub landing_site: Value,
-  pub cancelled_at: Option<DateTime<Utc>>,
-  pub cancel_reason: Option<String>,
-  pub total_price_usd: String,
-  pub checkout_token: Value,
-  pub reference: Value,
-  pub user_id: Option<i64>,
-  pub location_id: Option<i64>,
-  pub source_identifier: Value,
-  pub source_url: Option<String>,
-  pub processed_at: String,
-  pub device_id: Value,
-  pub phone: Option<String>,
-  pub customer_locale: Option<String>,
-  pub app_id: i64,
-  pub browser_ip: Option<String>,
-  pub landing_site_ref: Value,
-  pub order_number: i64,
-  pub discount_codes: Vec<DiscountCode>,
-  pub note_attributes: Vec<Property>,
-  pub payment_gateway_names: Vec<String>,
-  pub processing_method: String,
-  pub checkout_id: Value,
-  pub source_name: String,
-  pub fulfillment_status: Option<FulfillmentStatus>,
-  pub tax_lines: Vec<TaxLines>,
-  pub tags: String,
-  pub contact_email: Option<String>,
-  pub order_status_url: String,
-  pub line_items: Vec<LineItems>,
-  pub shipping_lines: Vec<ShippingLines>,
-  pub billing_address: Option<Address>,
-  pub shipping_address: Option<Address>,
-  pub fulfillments: Vec<Fulfillment>,
-  pub client_details: Option<ClientDetails>,
-  pub refunds: Vec<Value>,
-  pub customer: Option<Customer>,
+  #[serde(rename = "amount")]
+  pub amount: String,
+
+  #[serde(rename = "type")]
+  pub discount_code_type: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Fulfillment {
+  #[serde(rename = "id")]
   pub id: i64,
-  pub order_id: i64,
-  pub status: String,
+
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "created_at")]
   pub created_at: String,
+
+  #[serde(rename = "location_id")]
+  pub location_id: i64,
+
+  #[serde(rename = "name")]
+  pub name: String,
+
+  #[serde(rename = "order_id")]
+  pub order_id: i64,
+
+  #[serde(rename = "receipt")]
+  pub receipt: FulfillmentReceipt,
+
+  #[serde(rename = "service")]
   pub service: String,
-  pub updated_at: String,
-  pub tracking_company: Option<String>,
-  pub shipment_status: Option<ShipmentStatus>,
-  pub tracking_number: Option<String>,
+
+  #[serde(rename = "shipment_status")]
+  pub shipment_status: Option<serde_json::Value>,
+
+  #[serde(rename = "status")]
+  pub status: String,
+
+  #[serde(rename = "tracking_company")]
+  pub tracking_company: String,
+
+  #[serde(rename = "tracking_number")]
+  pub tracking_number: String,
+
+  #[serde(rename = "tracking_numbers")]
   pub tracking_numbers: Vec<String>,
-  pub tracking_url: Option<String>,
+
+  #[serde(rename = "tracking_url")]
+  pub tracking_url: String,
+
+  #[serde(rename = "tracking_urls")]
   pub tracking_urls: Vec<String>,
-  pub receipt: Value,
-  pub line_items: Vec<LineItems>,
+
+  #[serde(rename = "updated_at")]
+  pub updated_at: String,
+
+  #[serde(rename = "line_items")]
+  pub line_items: Vec<LineItem>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ShippingLines {
+pub struct LineItem {
+  #[serde(rename = "id")]
   pub id: i64,
-  pub title: String,
+
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "fulfillable_quantity")]
+  pub fulfillable_quantity: i64,
+
+  #[serde(rename = "fulfillment_service")]
+  pub fulfillment_service: String,
+
+  #[serde(rename = "fulfillment_status")]
+  pub fulfillment_status: Option<serde_json::Value>,
+
+  #[serde(rename = "gift_card")]
+  pub gift_card: bool,
+
+  #[serde(rename = "grams")]
+  pub grams: i64,
+
+  #[serde(rename = "name")]
+  pub name: String,
+
+  #[serde(rename = "price")]
   pub price: String,
-  pub code: String,
-  pub source: Option<String>,
-  pub phone: Option<String>,
-  pub requested_fulfillment_service_id: Value,
-  pub delivery_category: Value,
-  pub carrier_identifier: Value,
-  pub discounted_price: String,
-  pub tax_lines: Vec<TaxLines>,
+
+  #[serde(rename = "price_set")]
+  pub price_set: Set,
+
+  #[serde(rename = "product_exists")]
+  pub product_exists: bool,
+
+  #[serde(rename = "product_id")]
+  pub product_id: i64,
+
+  #[serde(rename = "properties")]
+  pub properties: Vec<NoteAttribute>,
+
+  #[serde(rename = "quantity")]
+  pub quantity: i64,
+
+  #[serde(rename = "requires_shipping")]
+  pub requires_shipping: bool,
+
+  #[serde(rename = "sku")]
+  pub sku: String,
+
+  #[serde(rename = "taxable")]
+  pub taxable: bool,
+
+  #[serde(rename = "title")]
+  pub title: String,
+
+  #[serde(rename = "total_discount")]
+  pub total_discount: String,
+
+  #[serde(rename = "total_discount_set")]
+  pub total_discount_set: Set,
+
+  #[serde(rename = "variant_id")]
+  pub variant_id: i64,
+
+  #[serde(rename = "variant_inventory_management")]
+  pub variant_inventory_management: String,
+
+  #[serde(rename = "variant_title")]
+  pub variant_title: String,
+
+  #[serde(rename = "vendor")]
+  pub vendor: Option<serde_json::Value>,
+
+  #[serde(rename = "tax_lines")]
+  pub tax_lines: Vec<TaxLine>,
+
+  #[serde(rename = "discount_allocations")]
+  pub discount_allocations: Vec<DiscountAllocation>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct TaxLines {
-  pub title: String,
+pub struct DiscountAllocation {
+  #[serde(rename = "amount")]
+  pub amount: String,
+
+  #[serde(rename = "amount_set")]
+  pub amount_set: Set,
+
+  #[serde(rename = "discount_application_index")]
+  pub discount_application_index: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Set {
+  #[serde(rename = "shop_money")]
+  pub shop_money: Money,
+
+  #[serde(rename = "presentment_money")]
+  pub presentment_money: Money,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Money {
+  #[serde(rename = "amount")]
+  pub amount: String,
+
+  #[serde(rename = "currency_code")]
+  pub currency_code: Currency,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct NoteAttribute {
+  #[serde(rename = "name")]
+  pub name: String,
+
+  #[serde(rename = "value")]
+  pub value: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TaxLine {
+  #[serde(rename = "price")]
   pub price: String,
+
+  #[serde(rename = "price_set")]
+  pub price_set: Set,
+
+  #[serde(rename = "rate")]
   pub rate: f64,
+
+  #[serde(rename = "title")]
+  pub title: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FulfillmentReceipt {
+  #[serde(rename = "testcase")]
+  pub testcase: bool,
+
+  #[serde(rename = "authorization")]
+  pub authorization: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PaymentDetails {
+  #[serde(rename = "credit_card_bin")]
+  pub credit_card_bin: Option<serde_json::Value>,
+
+  #[serde(rename = "avs_result_code")]
+  pub avs_result_code: Option<serde_json::Value>,
+
+  #[serde(rename = "cvv_result_code")]
+  pub cvv_result_code: Option<serde_json::Value>,
+
+  #[serde(rename = "credit_card_number")]
+  pub credit_card_number: String,
+
+  #[serde(rename = "credit_card_company")]
+  pub credit_card_company: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Refund {
+  #[serde(rename = "id")]
+  pub id: i64,
+
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "created_at")]
+  pub created_at: String,
+
+  #[serde(rename = "note")]
+  pub note: String,
+
+  #[serde(rename = "order_id")]
+  pub order_id: i64,
+
+  #[serde(rename = "processed_at")]
+  pub processed_at: String,
+
+  #[serde(rename = "restock")]
+  pub restock: bool,
+
+  #[serde(rename = "user_id")]
+  pub user_id: i64,
+
+  #[serde(rename = "order_adjustments")]
+  pub order_adjustments: Vec<Option<serde_json::Value>>,
+
+  #[serde(rename = "transactions")]
+  pub transactions: Vec<Transaction>,
+
+  #[serde(rename = "refund_line_items")]
+  pub refund_line_items: Vec<RefundLineItem>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RefundLineItem {
+  #[serde(rename = "id")]
+  pub id: i64,
+
+  #[serde(rename = "line_item_id")]
+  pub line_item_id: i64,
+
+  #[serde(rename = "location_id")]
+  pub location_id: i64,
+
+  #[serde(rename = "quantity")]
+  pub quantity: i64,
+
+  #[serde(rename = "restock_type")]
+  pub restock_type: String,
+
+  #[serde(rename = "subtotal")]
+  pub subtotal: f64,
+
+  #[serde(rename = "subtotal_set")]
+  pub subtotal_set: Set,
+
+  #[serde(rename = "total_tax")]
+  pub total_tax: f64,
+
+  #[serde(rename = "total_tax_set")]
+  pub total_tax_set: Set,
+
+  #[serde(rename = "line_item")]
+  pub line_item: LineItem,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Transaction {
+  #[serde(rename = "id")]
+  pub id: i64,
+
+  #[serde(rename = "admin_graphql_api_id")]
+  pub admin_graphql_api_id: String,
+
+  #[serde(rename = "amount")]
+  pub amount: String,
+
+  #[serde(rename = "authorization")]
+  pub authorization: String,
+
+  #[serde(rename = "created_at")]
+  pub created_at: String,
+
+  #[serde(rename = "currency")]
+  pub currency: Currency,
+
+  #[serde(rename = "device_id")]
+  pub device_id: Option<serde_json::Value>,
+
+  #[serde(rename = "error_code")]
+  pub error_code: Option<serde_json::Value>,
+
+  #[serde(rename = "gateway")]
+  pub gateway: String,
+
+  #[serde(rename = "kind")]
+  pub kind: String,
+
+  #[serde(rename = "location_id")]
+  pub location_id: Option<serde_json::Value>,
+
+  #[serde(rename = "message")]
+  pub message: Option<serde_json::Value>,
+
+  #[serde(rename = "order_id")]
+  pub order_id: i64,
+
+  #[serde(rename = "parent_id")]
+  pub parent_id: i64,
+
+  #[serde(rename = "processed_at")]
+  pub processed_at: String,
+
+  #[serde(rename = "receipt")]
+  pub receipt: TransactionReceipt,
+
+  #[serde(rename = "source_name")]
+  pub source_name: String,
+
+  #[serde(rename = "status")]
+  pub status: String,
+
+  #[serde(rename = "test")]
+  pub test: bool,
+
+  #[serde(rename = "user_id")]
+  pub user_id: Option<serde_json::Value>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TransactionReceipt {}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ShippingLine {
+  #[serde(rename = "id")]
+  pub id: i64,
+
+  #[serde(rename = "carrier_identifier")]
+  pub carrier_identifier: Option<serde_json::Value>,
+
+  #[serde(rename = "code")]
+  pub code: String,
+
+  #[serde(rename = "delivery_category")]
+  pub delivery_category: Option<serde_json::Value>,
+
+  #[serde(rename = "discounted_price")]
+  pub discounted_price: String,
+
+  #[serde(rename = "discounted_price_set")]
+  pub discounted_price_set: Set,
+
+  #[serde(rename = "phone")]
+  pub phone: Option<serde_json::Value>,
+
+  #[serde(rename = "price")]
+  pub price: String,
+
+  #[serde(rename = "price_set")]
+  pub price_set: Set,
+
+  #[serde(rename = "requested_fulfillment_service_id")]
+  pub requested_fulfillment_service_id: Option<serde_json::Value>,
+
+  #[serde(rename = "source")]
+  pub source: String,
+
+  #[serde(rename = "title")]
+  pub title: String,
+
+  #[serde(rename = "tax_lines")]
+  pub tax_lines: Vec<Option<serde_json::Value>>,
+
+  #[serde(rename = "discount_allocations")]
+  pub discount_allocations: Vec<Option<serde_json::Value>>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Currency {
+  #[serde(rename = "USD")]
+  Usd,
 }
