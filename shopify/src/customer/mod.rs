@@ -23,7 +23,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn create_customer(&self, params: &CustomerParams) -> ShopifyResult<Customer> {
+  async fn create_customer(&self, customer: &CustomerArg) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer:Customer,
@@ -34,7 +34,7 @@ impl Client {
       .request(
         Method::POST,
         &format!("/admin/{}/customers.json", self.context.api_version),
-        |b| b.json(params),
+        |b| b.json(customer),
       )
       .await?;
     Ok(res.into_inner())
@@ -53,21 +53,71 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_customer_orders(&self,id: i64) -> ShopifyResult<Vec<Order>> {
+  async fn get_customer_orders(&self, id: i64) -> ShopifyResult<Vec<Order>> {
     shopify_wrap! {
-        pub struct Res {
-          orders: Vec<Order>,
-        }
+      pub struct Res {
+        orders: Vec<Order>,
       }
-      let path = format!("/admin/{}/customers/{}/orders.json", self.context.api_version, id);
-      let res: Res = self
-        .request(Method::GET, &path, std::convert::identity)
-        .await?;
-      Ok(res.into_inner())
+    }
+    let path = format!(
+      "/admin/{}/customers/{}/orders.json",
+      self.context.api_version, id
+    );
+    let res: Res = self
+      .request(Method::GET, &path, std::convert::identity)
+      .await?;
+    Ok(res.into_inner())
   }
 
+  async fn get_customer_count(&self) -> ShopifyResult<CustomerCount> {
+    shopify_wrap! {
+      CustomerCount,
+      pub struct Res {
+        count: i64,
+      }
+    }
+    let path = format!("/admin/{}/customers/count.json", self.context.api_version);
+    let res: Res = self
+      .request(Method::GET, &path, std::convert::identity)
+      .await?;
+    Ok(res.into())
+  }
+
+  async fn update_customer(&self, customer: &CustomerArg, id: i64) -> ShopifyResult<Customer> {
+    shopify_wrap! {
+      pub struct Res {
+        customer: Customer,
+      }
+    }
+    let path = format!("/admin/{}/customers/{}.json", self.context.api_version, id);
+    let res: Res = self
+      .request(Method::PUT, &path, |b| b.json(customer))
+      .await?;
+    Ok(res.into_inner())
+  }
+
+  async fn search_customer(&self, params: &CustomerParams) -> ShopifyResult<Vec<Customer>> {
+    shopify_wrap! {
+      pub struct Res {
+        customers: Vec<Customer>,
+      }
+    }
+    let path = format!("/admin/{}/customers/search.json", self.context.api_version);
+    let res: Res = self
+      .request_with_params(Method::PUT, &path, params, std::convert::identity)
+      .await?;
+    Ok(res.into_inner())
+  }
 }
 
+request_query! {
+    pub struct CustomerParams {
+        pub fields: Option<String>,
+        pub limit: Option<i64>,
+        pub order: Option<String>,
+        pub query: Option<String>
+    }
+}
 
 #[cfg(test)]
 mod tests {
