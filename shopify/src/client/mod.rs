@@ -32,6 +32,35 @@ macro_rules! shopify_wrap {
       }
     }
   };
+
+  (
+    $map: ident,
+    pub struct $t:ident {
+      $key:ident: $inner_t:ty$(,)*
+    }
+  ) => {
+    use crate::client::ShopifyWrapper;
+
+    #[derive(Debug, Deserialize)]
+    pub struct $t {
+      $key: $inner_t,
+    }
+
+    impl ShopifyWrapper<$inner_t> for $t {
+      fn into_inner(self) -> $inner_t {
+        self.$key
+      }
+    }
+
+    impl Into<$map> for $t {
+      fn into(self) -> $map {
+        $map {
+          $key: self.$key
+        }
+      }
+    }
+
+  };
 }
 
 pub(crate) trait AsQueryValue {
