@@ -11,6 +11,7 @@ mod types;
 pub mod fulfillment_service;
 pub mod inventory;
 pub mod session;
+pub mod customer;
 pub mod order;
 pub mod context;
 pub mod auth;
