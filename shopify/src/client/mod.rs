@@ -34,6 +34,34 @@ macro_rules! shopify_wrap {
   };
 
   (
+    pub struct $t:ident {
+      $key:ident: $inner_t:ty$(,)*
+    }
+
+    pub struct $b:ident {
+      $bkey:ident: $binner_t:ty$(,)*
+    }
+  ) => {
+    use crate::client::ShopifyWrapper;
+
+    #[derive(Debug, Deserialize)]
+    pub struct $t {
+      $key: $inner_t,
+    }
+
+    #[derive(Debug,Serialize)]
+    pub struct $b {
+      $bkey: $binner_t,
+    }
+
+    impl ShopifyWrapper<$inner_t> for $t {
+      fn into_inner(self) -> $inner_t {
+        self.$key
+      }
+    }
+  };
+
+  (
     $map: ident,
     pub struct $t:ident {
       $key:ident: $inner_t:ty$(,)*
