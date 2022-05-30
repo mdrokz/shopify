@@ -6,7 +6,7 @@ mod types;
 pub use self::types::*;
 
 impl Client {
-  async fn get_address(&self,address_id: i64,customer_id: i64) -> ShopifyResult<CustomerAddress> {
+  async fn get_address(&self, address_id: i64, customer_id: i64) -> ShopifyResult<CustomerAddress> {
     shopify_wrap! {
       pub struct Res {
         customer_address: CustomerAddress,
@@ -16,30 +16,72 @@ impl Client {
     let res: Res = self
       .request(
         Method::GET,
-        &format!("/admin/{}/customers/{}/addresses/{}.json",customer_id,address_id, self.context.api_version),
+        &format!(
+          "/admin/{}/customers/{}/addresses/{}.json",
+          customer_id, address_id, self.context.api_version
+        ),
         std::convert::identity,
       )
       .await?;
     Ok(res.into_inner())
   }
 
-  async fn create_address(&self,customer_id: i64,address: CustomerAddress) -> ShopifyResult<CustomerAddress> {
+  async fn create_address(
+    &self,
+    customer_id: i64,
+    address: CustomerAddress,
+  ) -> ShopifyResult<CustomerAddress> {
     shopify_wrap! {
       pub struct Res {
         customer_address: CustomerAddress,
+      }
+
+      pub struct Body {
+        address: CustomerAddress
       }
     }
 
     let res: Res = self
       .request(
         Method::POST,
-        &format!("/admin/{}/customers/{}/addresses.json",customer_id, self.context.api_version),
-        |b| b.json(address),
+        &format!(
+          "/admin/{}/customers/{}/addresses.json",
+          customer_id, self.context.api_version
+        ),
+        |b| b.json(&Body { address }),
       )
       .await?;
     Ok(res.into_inner())
   }
 
+  async fn update_address(
+    &self,
+    address: CustomerAddress,
+    address_id: i64,
+    customer_id: i64,
+  ) -> ShopifyResult<CustomerAddress> {
+    shopify_wrap! {
+      pub struct Res {
+        customer_address: CustomerAddress,
+      }
+
+      pub struct Body {
+        address: CustomerAddress
+      }
+    }
+
+    let res: Res = self
+      .request(
+        Method::PUT,
+        &format!(
+          "/admin/{}/customers/{}/addresses/{}.json",
+          customer_id, address_id, self.context.api_version
+        ),
+        |b| b.json(&Body { address }),
+      )
+      .await?;
+    Ok(res.into_inner())
+  }
 
   async fn get_addresses(&self, customer_id: i64) -> ShopifyResult<Vec<CustomerAddress>> {
     shopify_wrap! {
@@ -47,13 +89,15 @@ impl Client {
         addresses: Vec<CustomerAddress>,
       }
     }
-    let path = format!("/admin/{}/customers/{}/addresses.json", self.context.api_version, id);
+    let path = format!(
+      "/admin/{}/customers/{}/addresses.json",
+      self.context.api_version, customer_id
+    );
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
     Ok(res.into_inner())
   }
-
 }
 
 request_query! {
