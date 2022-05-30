@@ -49,7 +49,7 @@ macro_rules! shopify_wrap {
       $key: $inner_t,
     }
 
-    #[derive(Debug,Serialize)]
+    #[derive(Debug, Serialize)]
     pub struct $b {
       $bkey: $binner_t,
     }
@@ -82,12 +82,9 @@ macro_rules! shopify_wrap {
 
     impl Into<$map> for $t {
       fn into(self) -> $map {
-        $map {
-          $key: self.$key
-        }
+        $map { $key: self.$key }
       }
     }
-
   };
 }
 
@@ -138,13 +135,16 @@ where
 #[macro_export]
 macro_rules! request_query {
   (
+    $(
     pub struct $t:ident {
       $(pub $key:ident: Option<$field_t:ty>),*
       $(,)*
     }
+    )*
   ) => (
     use crate::client::{ShopifyRequestQuery, AsQueryValue};
 
+    $(
     #[derive(Debug, Default)]
     pub struct $t {
       $(
@@ -161,6 +161,7 @@ macro_rules! request_query {
         pairs
       }
     }
+  )*
   );
 
   (PUSH_FIELD $s:expr, $v:expr, $key:ident, $t:tt) => {
