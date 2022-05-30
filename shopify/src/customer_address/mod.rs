@@ -1,6 +1,6 @@
 use crate::client::{Client, Method};
-use crate::order::Order;
-use crate::result::*;
+use crate::{map, result::*};
+use std::collections::HashMap;
 
 mod types;
 pub use self::types::*;
@@ -83,6 +83,80 @@ impl Client {
     Ok(res.into_inner())
   }
 
+  async fn set_default_address(
+    &self,
+    customer_id: i64,
+    address_id: i64,
+  ) -> ShopifyResult<CustomerAddress> {
+    shopify_wrap! {
+      pub struct Res {
+        customer_address: CustomerAddress,
+      }
+    }
+
+    let res: Res = self
+      .request(
+        Method::PUT,
+        &format!(
+          "/admin/{}/customers/{}/addresses/{}/default.json",
+          customer_id, address_id, self.context.api_version
+        ),
+        std::convert::identity,
+      )
+      .await?;
+    Ok(res.into_inner())
+  }
+
+  async fn delete_address(
+    &self,
+    customer_id: i64,
+    address_id: i64,
+  ) -> ShopifyResult<()> {
+
+    let _ = self
+      .request(
+        Method::DELETE,
+        &format!(
+          "/admin/{}/customers/{}/addresses/{}.json",
+          customer_id, address_id, self.context.api_version
+        ),
+        std::convert::identity,
+      )
+      .await?;
+    Ok(())
+  }
+
+  async fn bulk_update_address(
+    &self,
+    customer_id: i64,
+    params: BulkUpdateParams,
+  ) -> ShopifyResult<()> {
+    let address_ids: String = params.address_ids.map_or(String::new(), |v| {
+      v.iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<String>>()
+        .join(",")
+    });
+    let operation = params.operation.map_or(String::new(), |v| v);
+
+    let query = map! {
+      "address_ids[]" => address_ids,
+      "operation" => operation
+    };
+    let _ = self
+      .request_with_params(
+        Method::PUT,
+        &format!(
+          "/admin/{}/customers/{}/addresses/set.json",
+          customer_id, self.context.api_version
+        ),
+        &query,
+        std::convert::identity,
+      )
+      .await?;
+    Ok(())
+  }
+
   async fn get_addresses(&self, customer_id: i64) -> ShopifyResult<Vec<CustomerAddress>> {
     shopify_wrap! {
       pub struct Res {
@@ -98,6 +172,11 @@ impl Client {
       .await?;
     Ok(res.into_inner())
   }
+}
+
+pub struct BulkUpdateParams {
+  pub address_ids: Option<Vec<i64>>,
+  pub operation: Option<String>,
 }
 
 request_query! {

@@ -1,3 +1,5 @@
+use std::{collections::HashMap, fmt::Display, vec};
+
 #[doc(hidden)]
 pub trait ShopifyWrapper<T> {
   fn into_inner(self) -> T;
@@ -24,6 +26,29 @@ where
       None => vec![],
     }
   }
+}
+
+impl<T: Display> ShopifyRequestQuery for HashMap<&str, T>
+where
+  T: ShopifyRequestQuery,
+{
+  fn as_query_pairs(&self) -> Vec<(String, String)> {
+    let entries = self.iter();
+
+    let mut query_pair = vec![];
+
+    for (key, value) in entries {
+      query_pair.push((key.to_string(), format!("{}", value)));
+    }
+
+    query_pair
+  }
+}
+
+impl ShopifyRequestQuery for String {
+    fn as_query_pairs(&self) -> Vec<(String, String)> {
+        vec![]
+    }
 }
 
 impl<K, V> ShopifyRequestQuery for (K, V)
