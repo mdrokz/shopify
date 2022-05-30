@@ -12,6 +12,7 @@ pub mod fulfillment_service;
 pub mod inventory;
 pub mod session;
 pub mod customer;
+pub mod customer_saved_search;
 pub mod customer_address;
 pub mod order;
 pub mod context;
