@@ -15,9 +15,7 @@ pub enum ShopifyError {
   },
 
   #[error("context is missing these values {missing_values}")]
-  ContextMissingValues {
-    missing_values: String
-  },
+  ContextMissingValues { missing_values: String },
 
   #[error("invalid response")]
   InvalidResponse,
@@ -49,6 +47,21 @@ impl ShopifyError {
       ShopifyError::Io(_) => true,
       _ => false,
     }
+  }
+}
+
+impl axum::response::IntoResponse for ShopifyError {
+  fn into_response(self) -> axum::response::Response {
+    let status_code = match &self {
+      ShopifyError::Http(_) => axum::http::StatusCode::BAD_REQUEST,
+      ShopifyError::NotFound => axum::http::StatusCode::NOT_FOUND,
+      ShopifyError::ContextMissingValues { missing_values: _ } => {
+        axum::http::StatusCode::INTERNAL_SERVER_ERROR
+      }
+      ShopifyError::InvalidResponse => axum::http::StatusCode::BAD_REQUEST,
+      _ => axum::http::StatusCode::BAD_REQUEST,
+    };
+    (status_code, format!("{}", self)).into_response()
   }
 }
 
