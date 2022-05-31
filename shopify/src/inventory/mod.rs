@@ -6,7 +6,7 @@ mod types;
 pub use self::types::*;
 
 impl Client {
-  async fn get_location_list(&self) -> ShopifyResult<Vec<Location>> {
+  pub async fn get_location_list(&self) -> ShopifyResult<Vec<Location>> {
     shopify_wrap! {
       pub struct Res {
         locations: Vec<Location>,
@@ -19,7 +19,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_inventory_list(
+  pub async fn get_inventory_list(
     &self,
     params: &GetInventoryLevelsParams,
   ) -> ShopifyResult<Vec<InventoryLevel>> {
@@ -40,7 +40,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_location(&self, id: i64) -> ShopifyResult<Location> {
+  pub async fn get_location(&self, id: i64) -> ShopifyResult<Location> {
     shopify_wrap! {
       pub struct Res {
         location: Location,
