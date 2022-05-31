@@ -15,7 +15,7 @@ request_query! {
 }
 
 impl Client {
-  async fn list_product(
+  pub async fn list_product(
     &self,
     params: &GetProductListParams,
   ) -> ShopifyResult<Paginated<Vec<Product>>> {
@@ -56,7 +56,7 @@ impl Client {
     Ok(res.map(|p| p.into_inner()))
   }
 
-  async fn update_product<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Product> {
+  pub async fn update_product<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Product> {
     shopify_wrap! {
       pub struct Res {
         product: Product,
