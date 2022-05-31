@@ -6,7 +6,7 @@ mod types;
 pub use self::types::*;
 
 impl Client {
-  async fn get_address(&self, address_id: i64, customer_id: i64) -> ShopifyResult<CustomerAddress> {
+  pub async fn get_address(&self, address_id: i64, customer_id: i64) -> ShopifyResult<CustomerAddress> {
     shopify_wrap! {
       pub struct Res {
         customer_address: CustomerAddress,
@@ -26,7 +26,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn create_address(
+  pub async fn create_address(
     &self,
     customer_id: i64,
     address: CustomerAddress,
@@ -54,7 +54,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn update_address(
+  pub async fn update_address(
     &self,
     address: CustomerAddress,
     address_id: i64,
@@ -83,7 +83,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn set_default_address(
+  pub async fn set_default_address(
     &self,
     customer_id: i64,
     address_id: i64,
@@ -107,7 +107,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn delete_address(
+  pub async fn delete_address(
     &self,
     customer_id: i64,
     address_id: i64,
@@ -126,7 +126,7 @@ impl Client {
     Ok(())
   }
 
-  async fn bulk_update_address(
+  pub async fn bulk_update_address(
     &self,
     customer_id: i64,
     params: BulkUpdateParams,
@@ -157,7 +157,7 @@ impl Client {
     Ok(())
   }
 
-  async fn get_addresses(&self, customer_id: i64) -> ShopifyResult<Vec<CustomerAddress>> {
+  pub async fn get_addresses(&self, customer_id: i64) -> ShopifyResult<Vec<CustomerAddress>> {
     shopify_wrap! {
       pub struct Res {
         addresses: Vec<CustomerAddress>,
