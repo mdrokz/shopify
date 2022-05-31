@@ -52,7 +52,7 @@ request_query! {
 // }
 
 impl Client {
-  async fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
+  pub async fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
     shopify_wrap! {
       pub struct Res {
         orders: Vec<Order>,
@@ -63,7 +63,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_order(&self, id: i64) -> ShopifyResult<Order> {
+  pub async fn get_order(&self, id: i64) -> ShopifyResult<Order> {
     shopify_wrap! {
       pub struct Res {
         order: Order,
@@ -74,7 +74,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn create_order(
+  pub async fn create_order(
     &self,
     order_id: i64,
     fulfillment: &NewFulfillment,
@@ -91,7 +91,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn update_order(
+  pub async fn update_order(
     &self,
     order_id: i64,
     fulfillment_id: i64,
@@ -113,7 +113,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -128,7 +128,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -143,7 +143,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
