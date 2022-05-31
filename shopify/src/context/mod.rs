@@ -79,6 +79,10 @@ impl Default for Context {
 }
 
 impl Context {
+  pub fn set_access_token(&mut self, access_token: &str) {
+    self.access_token = access_token.to_string();
+  }
+
   pub fn authenticate(&self, b: RequestBuilder) -> ShopifyResult<RequestBuilder> {
     let mut errors = String::new();
 

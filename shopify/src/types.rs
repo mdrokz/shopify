@@ -3,6 +3,8 @@ use std::{collections::HashMap, fmt::Display};
 pub use chrono::{DateTime, Utc};
 pub use serde_json::Value;
 
+pub const SESSION_KEY: &str = "shopify_app_session";
+
 #[macro_export]
 macro_rules! map {
     ($($v: literal => $s: expr),*) => {{

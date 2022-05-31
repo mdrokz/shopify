@@ -9,6 +9,7 @@ use uuid::Uuid;
 
 use crate::client::{Client, Method};
 use crate::session::types::{Session, SessionStorage};
+use crate::types::SESSION_KEY;
 use anyhow::Result;
 
 use crate::{map, types::Query};
@@ -16,7 +17,6 @@ use crate::{map, types::Query};
 mod types;
 pub use self::types::*;
 
-const SESSION_KEY: &str = "shopify_app_session";
 
 impl Client {
   pub async fn begin_auth(
