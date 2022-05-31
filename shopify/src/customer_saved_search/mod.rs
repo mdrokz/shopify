@@ -8,7 +8,7 @@ mod types;
 pub use self::types::*;
 
 impl Client {
-  async fn get_saved_searches(
+  pub async fn get_saved_searches(
     &self,
     params: SavedParams,
   ) -> ShopifyResult<Vec<CustomerSavedSearchResponse>> {
@@ -32,7 +32,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn update_saved_search(
+  pub async fn update_saved_search(
     &self,
     customer_saved_search_id: i64,
     customer_saved_search: CustomerSavedSearchResponse,
@@ -64,7 +64,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn create_saved_search(
+  pub async fn create_saved_search(
     &self,
     customer_id: i64,
     customer_saved_search: SavedSearchArg,
@@ -96,7 +96,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn saved_search_by_customer(
+  pub async fn saved_search_by_customer(
     &self,
     customer_saved_search_id: i64,
     params: SavedCustomerParams,
@@ -121,7 +121,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn saved_search_count(
+  pub async fn saved_search_count(
     &self,
     params: SavedSearchCountParams,
   ) -> ShopifyResult<SavedSearchCount> {
@@ -146,7 +146,7 @@ impl Client {
     Ok(res.into())
   }
 
-  async fn delete_saved_search(&self, customer_saved_search_id: i64) -> ShopifyResult<()> {
+  pub async fn delete_saved_search(&self, customer_saved_search_id: i64) -> ShopifyResult<()> {
     let _ = self
       .request(
         Method::DELETE,
@@ -160,7 +160,7 @@ impl Client {
     Ok(())
   }
 
-  async fn get_saved_search(
+  pub async fn get_saved_search(
     &self,
     customer_saved_search_id: i64,
   ) -> ShopifyResult<CustomerSavedSearchResponse> {
