@@ -13,7 +13,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Order {
   #[serde(rename = "id")]
   pub id: i64,
@@ -232,7 +232,7 @@ pub struct Order {
   pub shipping_lines: Vec<ShippingLine>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Address {
   #[serde(rename = "first_name")]
   pub first_name: Option<String>,
@@ -292,7 +292,7 @@ pub struct Address {
   pub address_default: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClientDetails {
   #[serde(rename = "accept_language")]
   pub accept_language: Option<serde_json::Value>,
@@ -313,7 +313,7 @@ pub struct ClientDetails {
   pub user_agent: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: i64,
@@ -388,7 +388,7 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DiscountApplication {
   #[serde(rename = "target_type")]
   pub target_type: String,
@@ -412,7 +412,7 @@ pub struct DiscountApplication {
   pub code: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DiscountCode {
   #[serde(rename = "code")]
   pub code: String,
@@ -424,7 +424,7 @@ pub struct DiscountCode {
   pub discount_code_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Fulfillment {
   #[serde(rename = "id")]
   pub id: i64,
@@ -478,7 +478,7 @@ pub struct Fulfillment {
   pub line_items: Vec<LineItem>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LineItem {
   #[serde(rename = "id")]
   pub id: i64,
@@ -559,7 +559,7 @@ pub struct LineItem {
   pub discount_allocations: Vec<DiscountAllocation>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DiscountAllocation {
   #[serde(rename = "amount")]
   pub amount: String,
@@ -571,7 +571,7 @@ pub struct DiscountAllocation {
   pub discount_application_index: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Set {
   #[serde(rename = "shop_money")]
   pub shop_money: Money,
@@ -580,7 +580,7 @@ pub struct Set {
   pub presentment_money: Money,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Money {
   #[serde(rename = "amount")]
   pub amount: String,
@@ -589,7 +589,7 @@ pub struct Money {
   pub currency_code: Currency,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NoteAttribute {
   #[serde(rename = "name")]
   pub name: String,
@@ -598,7 +598,7 @@ pub struct NoteAttribute {
   pub value: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TaxLine {
   #[serde(rename = "price")]
   pub price: String,
@@ -613,7 +613,7 @@ pub struct TaxLine {
   pub title: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FulfillmentReceipt {
   #[serde(rename = "testcase")]
   pub testcase: bool,
@@ -622,7 +622,7 @@ pub struct FulfillmentReceipt {
   pub authorization: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentDetails {
   #[serde(rename = "credit_card_bin")]
   pub credit_card_bin: Option<serde_json::Value>,
@@ -640,7 +640,7 @@ pub struct PaymentDetails {
   pub credit_card_company: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Refund {
   #[serde(rename = "id")]
   pub id: i64,
@@ -676,7 +676,7 @@ pub struct Refund {
   pub refund_line_items: Vec<RefundLineItem>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RefundLineItem {
   #[serde(rename = "id")]
   pub id: i64,
@@ -709,7 +709,7 @@ pub struct RefundLineItem {
   pub line_item: LineItem,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
   #[serde(rename = "id")]
   pub id: i64,
@@ -772,10 +772,10 @@ pub struct Transaction {
   pub user_id: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TransactionReceipt {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ShippingLine {
   #[serde(rename = "id")]
   pub id: i64,
@@ -820,7 +820,7 @@ pub struct ShippingLine {
   pub discount_allocations: Vec<Option<serde_json::Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug,Clone, Serialize, Deserialize)]
 pub enum Currency {
   #[serde(rename = "USD")]
   Usd,

@@ -25,62 +25,60 @@ use serde::{Deserialize, Serialize};
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CustomerCount {
-    pub count: i64
+  pub count: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CustomerArg {
-    #[serde(rename = "first_name")]
-    pub first_name: String,
+  #[serde(rename = "first_name")]
+  pub first_name: String,
 
-    #[serde(rename = "last_name")]
-    pub last_name: String,
+  #[serde(rename = "last_name")]
+  pub last_name: String,
 
-    #[serde(rename = "email")]
-    pub email: String,
+  #[serde(rename = "email")]
+  pub email: String,
 
-    #[serde(rename = "phone")]
-    pub phone: String,
+  #[serde(rename = "phone")]
+  pub phone: String,
 
-    #[serde(rename = "verified_email")]
-    pub verified_email: bool,
+  #[serde(rename = "verified_email")]
+  pub verified_email: bool,
 
-    #[serde(rename = "addresses")]
-    pub addresses: Vec<AddressArg>,
+  #[serde(rename = "addresses")]
+  pub addresses: Vec<AddressArg>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddressArg {
-    #[serde(rename = "address1")]
-    pub address1: String,
+  #[serde(rename = "address1")]
+  pub address1: String,
 
-    #[serde(rename = "city")]
-    pub city: String,
+  #[serde(rename = "city")]
+  pub city: String,
 
-    #[serde(rename = "province")]
-    pub province: String,
+  #[serde(rename = "province")]
+  pub province: String,
 
-    #[serde(rename = "phone")]
-    pub phone: String,
+  #[serde(rename = "phone")]
+  pub phone: String,
 
-    #[serde(rename = "zip")]
-    pub zip: String,
+  #[serde(rename = "zip")]
+  pub zip: String,
 
-    #[serde(rename = "last_name")]
-    pub last_name: String,
+  #[serde(rename = "last_name")]
+  pub last_name: String,
 
-    #[serde(rename = "first_name")]
-    pub first_name: String,
+  #[serde(rename = "first_name")]
+  pub first_name: String,
 
-    #[serde(rename = "country")]
-    pub country: String,
+  #[serde(rename = "country")]
+  pub country: String,
 }
 
-
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: i64,
@@ -158,7 +156,7 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Address {
   #[serde(rename = "id")]
   pub id: i64,

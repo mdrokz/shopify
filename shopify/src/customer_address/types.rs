@@ -13,7 +13,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug,Clone, Serialize, Deserialize)]
 pub struct CustomerAddress {
   #[serde(rename = "address1")]
   pub address1: String,
@@ -64,7 +64,7 @@ pub struct CustomerAddress {
   pub zip: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug,Clone, Serialize, Deserialize)]
 pub struct CustomerId {
   #[serde(rename = "id")]
   pub id: i64,
