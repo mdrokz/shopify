@@ -6,7 +6,7 @@ mod types;
 pub use self::types::*;
 
 impl Client {
-  async fn get_customer_list(&self) -> ShopifyResult<Vec<Customer>> {
+  pub async fn get_customer_list(&self) -> ShopifyResult<Vec<Customer>> {
     shopify_wrap! {
       pub struct Res {
         customers: Vec<Customer>,
@@ -23,7 +23,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn create_customer(&self, customer: &CustomerArg) -> ShopifyResult<Customer> {
+  pub async fn create_customer(&self, customer: &CustomerArg) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer:Customer,
@@ -40,7 +40,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_customer(&self, id: i64) -> ShopifyResult<Customer> {
+  pub async fn get_customer(&self, id: i64) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer: Customer,
@@ -53,7 +53,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_customer_orders(&self, id: i64) -> ShopifyResult<Vec<Order>> {
+  pub async fn get_customer_orders(&self, id: i64) -> ShopifyResult<Vec<Order>> {
     shopify_wrap! {
       pub struct Res {
         orders: Vec<Order>,
@@ -69,7 +69,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn get_customer_count(&self) -> ShopifyResult<CustomerCount> {
+  pub async fn get_customer_count(&self) -> ShopifyResult<CustomerCount> {
     shopify_wrap! {
       CustomerCount,
       pub struct Res {
@@ -83,7 +83,7 @@ impl Client {
     Ok(res.into())
   }
 
-  async fn update_customer(&self, customer: &CustomerArg, id: i64) -> ShopifyResult<Customer> {
+  pub async fn update_customer(&self, customer: &CustomerArg, id: i64) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer: Customer,
@@ -96,7 +96,7 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  async fn search_customer(&self, params: &CustomerParams) -> ShopifyResult<Vec<Customer>> {
+  pub async fn search_customer(&self, params: &CustomerParams) -> ShopifyResult<Vec<Customer>> {
     shopify_wrap! {
       pub struct Res {
         customers: Vec<Customer>,
