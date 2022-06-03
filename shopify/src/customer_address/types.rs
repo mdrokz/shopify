@@ -11,9 +11,10 @@
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
 
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug,Clone, Serialize, Deserialize)]
+#[derive(Debug,Clone, Serialize, Deserialize,JsonSchema)]
 pub struct CustomerAddress {
   #[serde(rename = "address1")]
   pub address1: String,
@@ -64,7 +65,7 @@ pub struct CustomerAddress {
   pub zip: String,
 }
 
-#[derive(Debug,Clone, Serialize, Deserialize)]
+#[derive(Debug,Clone, Serialize, Deserialize,JsonSchema)]
 pub struct CustomerId {
   #[serde(rename = "id")]
   pub id: i64,
