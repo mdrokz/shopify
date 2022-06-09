@@ -1,6 +1,8 @@
-use crate::types::{DateTime, Utc};
+use schemars::JsonSchema;
 
-#[derive(Debug, Serialize, Deserialize)]
+use crate::types::{Date};
+
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct Variant {
   pub id: i64,
   pub product_id: i64,
@@ -15,8 +17,8 @@ pub struct Variant {
   pub option1: Option<String>,
   pub option2: Option<String>,
   pub option3: Option<String>,
-  pub created_at: DateTime<Utc>,
-  pub updated_at: DateTime<Utc>,
+  pub created_at: Date,
+  pub updated_at: Date,
   pub taxable: bool,
   pub barcode: Option<String>,
   pub grams: i64,
