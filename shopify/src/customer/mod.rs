@@ -28,13 +28,17 @@ impl Client {
       pub struct Res {
         customer:Customer,
       }
+
+      pub struct Body {
+        customer: CustomerArg
+      }
     }
 
     let res: Res = self
       .request(
         Method::POST,
         &format!("/admin/api/{}/customers.json", self.context.api_version),
-        |b| b.json(customer),
+        |b| b.json(&Body { customer }),
       )
       .await?;
     Ok(res.into_inner())
@@ -46,7 +50,10 @@ impl Client {
         customer: Customer,
       }
     }
-    let path = format!("/admin/api/{}/customers/{}.json", self.context.api_version, id);
+    let path = format!(
+      "/admin/api/{}/customers/{}.json",
+      self.context.api_version, id
+    );
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
@@ -76,7 +83,10 @@ impl Client {
         count: i64,
       }
     }
-    let path = format!("/admin/api/{}/customers/count.json", self.context.api_version);
+    let path = format!(
+      "/admin/api/{}/customers/count.json",
+      self.context.api_version
+    );
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
@@ -88,10 +98,16 @@ impl Client {
       pub struct Res {
         customer: Customer,
       }
+      pub struct Body {
+        customer: CustomerArg
+      }
     }
-    let path = format!("/admin/api/{}/customers/{}.json", self.context.api_version, id);
+    let path = format!(
+      "/admin/api/{}/customers/{}.json",
+      self.context.api_version, id
+    );
     let res: Res = self
-      .request(Method::PUT, &path, |b| b.json(customer))
+      .request(Method::PUT, &path, |b| b.json(&Body { customer }))
       .await?;
     Ok(res.into_inner())
   }
@@ -102,7 +118,10 @@ impl Client {
         customers: Vec<Customer>,
       }
     }
-    let path = format!("/admin/api/{}/customers/search.json", self.context.api_version);
+    let path = format!(
+      "/admin/api/{}/customers/search.json",
+      self.context.api_version
+    );
     let res: Res = self
       .request_with_params(Method::PUT, &path, params, std::convert::identity)
       .await?;
