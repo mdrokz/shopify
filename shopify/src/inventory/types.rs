@@ -1,7 +1,8 @@
-use chrono::{DateTime, Utc};
+use crate::types::{Date};
 use serde_json::Value;
+use schemars::JsonSchema;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct Location {
   pub id: i64,
   pub name: String,
@@ -21,11 +22,11 @@ pub struct Location {
   pub updated_at: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct InventoryLevel {
   pub inventory_item_id: i64,
   pub location_id: i64,
   pub available: Value,
   pub admin_graphql_api_id: String,
-  pub updated_at: DateTime<Utc>,
+  pub updated_at: Date,
 }
