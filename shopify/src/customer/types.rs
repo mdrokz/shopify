@@ -26,12 +26,12 @@ use serde::{Deserialize, Serialize};
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug,Default, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct CustomerCount {
   pub count: i64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone,Default, Serialize, Deserialize, JsonSchema)]
 pub struct CustomerArg {
   #[serde(rename = "first_name")]
   pub first_name: String,
@@ -52,7 +52,7 @@ pub struct CustomerArg {
   pub addresses: Vec<AddressArg>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone,Default, Serialize, Deserialize, JsonSchema)]
 pub struct AddressArg {
   #[serde(rename = "address1")]
   pub address1: String,
@@ -79,7 +79,7 @@ pub struct AddressArg {
   pub country: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone,Default, Serialize, Deserialize, JsonSchema)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: i64,
@@ -157,7 +157,7 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone,Default, Serialize, Deserialize, JsonSchema)]
 pub struct Address {
   #[serde(rename = "id")]
   pub id: i64,
