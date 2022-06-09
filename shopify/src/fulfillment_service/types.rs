@@ -1,8 +1,17 @@
-#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq)]
+use schemars::JsonSchema;
+
+
+#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq,JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum FulfillmentServiceScope {
   CurrentClient,
   All,
+}
+
+impl Default for FulfillmentServiceScope {
+  fn default() -> Self {
+    FulfillmentServiceScope::CurrentClient
+  }
 }
 
 impl AsRef<str> for FulfillmentServiceScope {
@@ -14,7 +23,7 @@ impl AsRef<str> for FulfillmentServiceScope {
   }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize,Default,JsonSchema)]
 pub struct FulfillmentService {
   pub id: i64,
   pub name: String,
@@ -28,7 +37,7 @@ pub struct FulfillmentService {
   pub location_id: i64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize,Default,JsonSchema)]
 pub struct NewFulfillmentService {
   pub name: String,
   pub callback_url: String,
@@ -38,7 +47,7 @@ pub struct NewFulfillmentService {
   pub format: String,
 }
 
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Serialize, Default,JsonSchema)]
 pub struct UpdateFulfillmentService {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub name: Option<String>,
