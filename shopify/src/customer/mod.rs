@@ -38,7 +38,7 @@ impl Client {
       .request(
         Method::POST,
         &format!("/admin/api/{}/customers.json", self.context.api_version),
-        |b| b.json(&Body { customer }),
+        |b| b.json(&Body { customer: customer.clone() }),
       )
       .await?;
     Ok(res.into_inner())
@@ -107,7 +107,7 @@ impl Client {
       self.context.api_version, id
     );
     let res: Res = self
-      .request(Method::PUT, &path, |b| b.json(&Body { customer }))
+      .request(Method::PUT, &path, |b| b.json(&Body { customer: customer.clone() }))
       .await?;
     Ok(res.into_inner())
   }
