@@ -1,4 +1,5 @@
-use crate::types::{DateTime, Utc, Value};
+use crate::types::{Date, Value};
+use schemars::JsonSchema;
 
 /// The Shopify API's shop object is a collection of the general settings and information about the shop.
 /// // Example code that deserializes and serializes the model.
@@ -29,7 +30,7 @@ use crate::types::{DateTime, Utc, Value};
 // }
 
 /// The Shopify API's shop object is a collection of the general settings and information about the shop.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize,Default,JsonSchema)]
 pub struct Shop {
   #[serde(rename = "id")]
   pub id: i64,
@@ -77,10 +78,10 @@ pub struct Shop {
   pub address2: Option<serde_json::Value>,
 
   #[serde(rename = "created_at")]
-  pub created_at: DateTime<Utc>,
+  pub created_at: Date,
 
   #[serde(rename = "updated_at")]
-  pub updated_at: DateTime<Utc>,
+  pub updated_at: Date,
 
   #[serde(rename = "country_code")]
   pub country_code: String,
