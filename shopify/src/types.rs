@@ -31,3 +31,25 @@ impl<V: Display> Into<Query> for HashMap<&str, V> {
     Query(query)
   }
 }
+
+use schemars::{schema::Schema, schema_for_value, JsonSchema};
+
+#[derive(Serialize, Debug, Clone, Deserialize)]
+pub struct Date(pub DateTime<Utc>);
+
+impl Default for Date {
+  fn default() -> Self {
+    Self(Utc::now())
+  }
+}
+
+impl JsonSchema for Date {
+  fn schema_name() -> String {
+    "UTC DateTime".into()
+  }
+
+  fn json_schema(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+    let root_schema = schema_for_value!(Date::default());
+    Schema::Object(root_schema.schema)
+  }
+}
