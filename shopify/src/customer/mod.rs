@@ -16,7 +16,7 @@ impl Client {
     let res: Res = self
       .request(
         Method::GET,
-        &format!("/admin/{}/customers.json", self.context.api_version),
+        &format!("/admin/api/{}/customers.json", self.context.api_version),
         std::convert::identity,
       )
       .await?;
@@ -33,7 +33,7 @@ impl Client {
     let res: Res = self
       .request(
         Method::POST,
-        &format!("/admin/{}/customers.json", self.context.api_version),
+        &format!("/admin/api/{}/customers.json", self.context.api_version),
         |b| b.json(customer),
       )
       .await?;
@@ -46,7 +46,7 @@ impl Client {
         customer: Customer,
       }
     }
-    let path = format!("/admin/{}/customers/{}.json", self.context.api_version, id);
+    let path = format!("/admin/api/{}/customers/{}.json", self.context.api_version, id);
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
@@ -60,7 +60,7 @@ impl Client {
       }
     }
     let path = format!(
-      "/admin/{}/customers/{}/orders.json",
+      "/admin/api/{}/customers/{}/orders.json",
       self.context.api_version, id
     );
     let res: Res = self
@@ -76,7 +76,7 @@ impl Client {
         count: i64,
       }
     }
-    let path = format!("/admin/{}/customers/count.json", self.context.api_version);
+    let path = format!("/admin/api/{}/customers/count.json", self.context.api_version);
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
@@ -89,7 +89,7 @@ impl Client {
         customer: Customer,
       }
     }
-    let path = format!("/admin/{}/customers/{}.json", self.context.api_version, id);
+    let path = format!("/admin/api/{}/customers/{}.json", self.context.api_version, id);
     let res: Res = self
       .request(Method::PUT, &path, |b| b.json(customer))
       .await?;
@@ -102,7 +102,7 @@ impl Client {
         customers: Vec<Customer>,
       }
     }
-    let path = format!("/admin/{}/customers/search.json", self.context.api_version);
+    let path = format!("/admin/api/{}/customers/search.json", self.context.api_version);
     let res: Res = self
       .request_with_params(Method::PUT, &path, params, std::convert::identity)
       .await?;
