@@ -1,19 +1,20 @@
 use serde::{Deserialize, Serialize};
+use schemars::JsonSchema;
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 
 pub struct SavedSearchCount {
     pub count: i64
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct SavedSearchArg {
     #[serde(rename = "customer_saved_search")]
     pub customer_saved_search: CustomerSavedSearch,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct CustomerSavedSearch {
     #[serde(rename = "name")]
     pub name: String,
@@ -23,7 +24,7 @@ pub struct CustomerSavedSearch {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
 pub struct CustomerSavedSearchResponse {
   #[serde(rename = "created_at")]
   pub created_at: String,
