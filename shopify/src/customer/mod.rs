@@ -23,14 +23,14 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  pub async fn create_customer(&self, customer: &CustomerArg) -> ShopifyResult<Customer> {
+  pub async fn create_customer(&self, customer: &Customer) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer:Customer,
       }
 
       pub struct Body {
-        customer: CustomerArg
+        customer: Customer
       }
     }
 
@@ -93,13 +93,13 @@ impl Client {
     Ok(res.into())
   }
 
-  pub async fn update_customer(&self, customer: &CustomerArg, id: i64) -> ShopifyResult<Customer> {
+  pub async fn update_customer(&self, customer: &Customer, id: i64) -> ShopifyResult<Customer> {
     shopify_wrap! {
       pub struct Res {
         customer: Customer,
       }
       pub struct Body {
-        customer: CustomerArg
+        customer: Customer
       }
     }
     let path = format!(
