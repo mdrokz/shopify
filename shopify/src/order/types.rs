@@ -830,6 +830,6 @@ pub enum Currency {
 
 impl Default for Currency {
   fn default() -> Self {
-    Currency::Usd
+    Self::Usd
   }
 }
