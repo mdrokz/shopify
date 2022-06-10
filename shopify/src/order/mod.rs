@@ -52,7 +52,7 @@ request_query! {
 // }
 
 impl Client {
-  pub async fn get_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
+  pub async fn get_order_list(&self, params: &GetOrderListParams) -> ShopifyResult<Vec<Order>> {
     shopify_wrap! {
       pub struct Res {
         orders: Vec<Order>,
@@ -62,7 +62,7 @@ impl Client {
     let res: Res = self
       .request_with_params(
         Method::GET,
-        "/admin/orders.json",
+        &format!("/admin/api/{}/orders.json",self.context.api_version),
         params,
         std::convert::identity,
       )
@@ -80,7 +80,7 @@ impl Client {
     let res: Res = self
       .request(
         Method::GET,
-        &format!("/admin/orders/{}.json", id),
+        &format!("/admin/api/{}/orders/{}.json",self.context.api_version, id),
         std::convert::identity,
       )
       .await?;
@@ -97,7 +97,7 @@ impl Client {
         order: OrderArg
       }
     }
-    let path = format!("/admin/api/{}/orders/orders.json", self.context.api_version);
+    let path = format!("/admin/api/{}/orders.json", self.context.api_version);
     let res: Res = self
       .request(Method::POST, &path, move |b| {
         b.json(&Body {
