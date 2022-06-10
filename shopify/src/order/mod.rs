@@ -59,7 +59,14 @@ impl Client {
       }
     }
 
-    let res: Res = self.request_with_params(Method::GET, "/admin/orders.json", params, std::convert::identity).await?;
+    let res: Res = self
+      .request_with_params(
+        Method::GET,
+        "/admin/orders.json",
+        params,
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.into_inner())
   }
 
@@ -70,11 +77,38 @@ impl Client {
       }
     }
 
-    let res: Res = self.request(Method::GET, &format!("/admin/orders/{}.json", id), std::convert::identity).await?;
+    let res: Res = self
+      .request(
+        Method::GET,
+        &format!("/admin/orders/{}.json", id),
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn create_order(
+  pub async fn create_order(&self, order_arg: &OrderArg) -> ShopifyResult<Order> {
+    shopify_wrap! {
+      pub struct Res {
+        fulfillment: Order,
+      }
+
+      pub struct Body {
+        order: OrderArg
+      }
+    }
+    let path = format!("/admin/api/{}/orders/orders.json", self.context.api_version);
+    let res: Res = self
+      .request(Method::POST, &path, move |b| {
+        b.json(&Body {
+          order: order_arg.clone(),
+        })
+      })
+      .await?;
+    Ok(res.into_inner())
+  }
+
+  pub async fn create_fullfillment_order(
     &self,
     order_id: i64,
     fulfillment: &NewFulfillment,
@@ -85,13 +119,15 @@ impl Client {
       }
     }
     let path = format!("/admin/orders/{}/fulfillments.json", order_id);
-    let res: Res = self.request(Method::POST, &path, move |b| {
-      b.json(&json!({ "fulfillment": fulfillment }))
-    }).await?;
+    let res: Res = self
+      .request(Method::POST, &path, move |b| {
+        b.json(&json!({ "fulfillment": fulfillment }))
+      })
+      .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn update_order(
+  pub async fn update_fullfillment_order(
     &self,
     order_id: i64,
     fulfillment_id: i64,
@@ -107,13 +143,19 @@ impl Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::PUT, &path, move |b| {
-      b.json(&json!({ "fulfillment": fulfillment }))
-    }).await?;
+    let res: Res = self
+      .request(Method::PUT, &path, move |b| {
+        b.json(&json!({ "fulfillment": fulfillment }))
+      })
+      .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn complete_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn complete_fulfillment(
+    &self,
+    order_id: i64,
+    fulfillment_id: i64,
+  ) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -124,11 +166,17 @@ impl Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
+    let res: Res = self
+      .request(Method::POST, &path, std::convert::identity)
+      .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn open_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn open_fulfillment(
+    &self,
+    order_id: i64,
+    fulfillment_id: i64,
+  ) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -139,11 +187,17 @@ impl Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
+    let res: Res = self
+      .request(Method::POST, &path, std::convert::identity)
+      .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn cancel_fulfillment(&self, order_id: i64, fulfillment_id: i64) -> ShopifyResult<Fulfillment> {
+  pub async fn cancel_fulfillment(
+    &self,
+    order_id: i64,
+    fulfillment_id: i64,
+  ) -> ShopifyResult<Fulfillment> {
     shopify_wrap! {
       pub struct Res {
         fulfillment: Fulfillment,
@@ -154,7 +208,9 @@ impl Client {
       order_id = order_id,
       fulfillment_id = fulfillment_id
     );
-    let res: Res = self.request(Method::POST, &path, std::convert::identity).await?;
+    let res: Res = self
+      .request(Method::POST, &path, std::convert::identity)
+      .await?;
     Ok(res.into_inner())
   }
 }
@@ -187,7 +243,12 @@ mod tests {
       println!("Downloading page {}", page);
 
       let orders = client
-        .request_with_params::<_, RawOrders, _>(Method::GET, "/admin/orders.json", &params, std::convert::identity)
+        .request_with_params::<_, RawOrders, _>(
+          Method::GET,
+          "/admin/orders.json",
+          &params,
+          std::convert::identity,
+        )
         .unwrap()
         .into_inner();
 
@@ -247,7 +308,7 @@ mod tests {
   #[test]
   #[ignore]
   fn test_create_fulfillment() {
-    let client =crate::client::get_test_client();
+    let client = crate::client::get_test_client();
     let mut f = NewFulfillment::new();
     f.add_item(59878440973, Some(1)).tracking_number("7777");
     client.create_fulfillment(33673216013, &f).unwrap();
@@ -255,7 +316,7 @@ mod tests {
 
   #[test]
   fn test_update_fulfillment() {
-    let client =crate::client::get_test_client();
+    let client = crate::client::get_test_client();
     let mut f = NewFulfillment::new();
     f.add_item(59878440973, Some(1))
       .tracking_number("1Z30434EDG37750543");
