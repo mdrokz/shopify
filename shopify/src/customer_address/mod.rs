@@ -17,7 +17,7 @@ impl Client {
       .request(
         Method::GET,
         &format!(
-          "/admin/{}/customers/{}/addresses/{}.json",
+          "/admin/api/{}/customers/{}/addresses/{}.json",
           customer_id, address_id, self.context.api_version
         ),
         std::convert::identity,
@@ -45,7 +45,7 @@ impl Client {
       .request(
         Method::POST,
         &format!(
-          "/admin/{}/customers/{}/addresses.json",
+          "/admin/api/{}/customers/{}/addresses.json",
           customer_id, self.context.api_version
         ),
         |b| b.json(&Body { address }),
@@ -74,7 +74,7 @@ impl Client {
       .request(
         Method::PUT,
         &format!(
-          "/admin/{}/customers/{}/addresses/{}.json",
+          "/admin/api/{}/customers/{}/addresses/{}.json",
           customer_id, address_id, self.context.api_version
         ),
         |b| b.json(&Body { address }),
@@ -98,7 +98,7 @@ impl Client {
       .request(
         Method::PUT,
         &format!(
-          "/admin/{}/customers/{}/addresses/{}/default.json",
+          "/admin/api/{}/customers/{}/addresses/{}/default.json",
           customer_id, address_id, self.context.api_version
         ),
         std::convert::identity,
@@ -117,7 +117,7 @@ impl Client {
       .request(
         Method::DELETE,
         &format!(
-          "/admin/{}/customers/{}/addresses/{}.json",
+          "/admin/api/{}/customers/{}/addresses/{}.json",
           customer_id, address_id, self.context.api_version
         ),
         std::convert::identity,
@@ -147,7 +147,7 @@ impl Client {
       .request_with_params(
         Method::PUT,
         &format!(
-          "/admin/{}/customers/{}/addresses/set.json",
+          "/admin/api/{}/customers/{}/addresses/set.json",
           customer_id, self.context.api_version
         ),
         &query,
@@ -164,7 +164,7 @@ impl Client {
       }
     }
     let path = format!(
-      "/admin/{}/customers/{}/addresses.json",
+      "/admin/api/{}/customers/{}/addresses.json",
       self.context.api_version, customer_id
     );
     let res: Res = self

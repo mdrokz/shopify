@@ -14,7 +14,7 @@ impl Client {
     }
 
     let res: Res = self
-      .request(Method::GET, "/admin/locations.json", std::convert::identity)
+      .request(Method::GET, "/admin/api/locations.json", std::convert::identity)
       .await?;
     Ok(res.into_inner())
   }
@@ -32,7 +32,7 @@ impl Client {
     let res: Res = self
       .request_with_params(
         Method::GET,
-        "/admin/inventory_levels.json",
+        "/admin/api/inventory_levels.json",
         params,
         std::convert::identity,
       )
@@ -46,7 +46,7 @@ impl Client {
         location: Location,
       }
     }
-    let path = format!("/admin/locations/{}.json", id);
+    let path = format!("/admin/api/locations/{}.json", id);
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;

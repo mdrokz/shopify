@@ -22,7 +22,7 @@ impl Client {
       .request_with_params(
         Method::GET,
         &format!(
-          "/admin/{}/customer_saved_searches.json",
+          "/admin/api/{}/customer_saved_searches.json",
           self.context.api_version
         ),
         &params,
@@ -51,7 +51,7 @@ impl Client {
       .request(
         Method::PUT,
         &format!(
-          "/admin/{}/customer_saved_searches/{}.json",
+          "/admin/api/{}/customer_saved_searches/{}.json",
           self.context.api_version, customer_saved_search_id
         ),
         |b| {
@@ -83,7 +83,7 @@ impl Client {
       .request(
         Method::POST,
         &format!(
-          "/admin/{}/customer_saved_searches.json",
+          "/admin/api/{}/customer_saved_searches.json",
           self.context.api_version
         ),
         |b| {
@@ -111,7 +111,7 @@ impl Client {
       .request_with_params(
         Method::GET,
         &format!(
-          "/admin/{}/customer_saved_searches/{}/customers.json",
+          "/admin/api/{}/customer_saved_searches/{}/customers.json",
           self.context.api_version, customer_saved_search_id
         ),
         &params,
@@ -136,7 +136,7 @@ impl Client {
       .request_with_params(
         Method::GET,
         &format!(
-          "/admin/{}/customer_saved_searches/count.json",
+          "/admin/api/{}/customer_saved_searches/count.json",
           self.context.api_version
         ),
         &params,
@@ -151,7 +151,7 @@ impl Client {
       .request(
         Method::DELETE,
         &format!(
-          "/admin/{}/customer_saved_searches/{}.json",
+          "/admin/api/{}/customer_saved_searches/{}.json",
           self.context.api_version, customer_saved_search_id
         ),
         std::convert::identity,
@@ -170,7 +170,7 @@ impl Client {
       }
     }
     let path = format!(
-      "/admin/{}/customer_saved_searches/{}.json",
+      "/admin/api/{}/customer_saved_searches/{}.json",
       self.context.api_version, customer_saved_search_id
     );
     let res: Res = self
