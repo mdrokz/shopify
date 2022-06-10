@@ -16,7 +16,13 @@ pub trait ShopApi {
 
 impl Client {
   pub async fn get_shop(&self) -> ShopifyResult<Shop> {
-    let res: GetShop = self.request(Method::GET, "/admin/shop.json", std::convert::identity).await?;
+    let res: GetShop = self
+      .request(
+        Method::GET,
+        &format!("/admin/api/{}/shop.json", self.context.api_version),
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.into_inner())
   }
 }
@@ -84,7 +90,8 @@ mod tests {
       }
     }
     "##,
-    ).unwrap();
+    )
+    .unwrap();
   }
 
   #[test]
