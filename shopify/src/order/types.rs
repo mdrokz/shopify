@@ -827,6 +827,31 @@ pub enum Currency {
   Usd,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+
+pub struct OrderArg {
+  #[serde(rename = "line_items")]
+    pub line_items: Vec<LineItemArg>,
+
+    #[serde(rename = "customer")]
+    pub customer: CustomerArg,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+pub struct CustomerArg {
+    #[serde(rename = "id")]
+    pub id: i64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+pub struct LineItemArg {
+    #[serde(rename = "variant_id")]
+    pub variant_id: i64,
+
+    #[serde(rename = "quantity")]
+    pub quantity: i64,
+}
+
 
 impl Default for Currency {
   fn default() -> Self {
