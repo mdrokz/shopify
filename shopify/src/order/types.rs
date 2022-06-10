@@ -14,7 +14,7 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Order {
   #[serde(rename = "id")]
   pub id: i64,
@@ -233,7 +233,7 @@ pub struct Order {
   pub shipping_lines: Vec<ShippingLine>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Address {
   #[serde(rename = "first_name")]
   pub first_name: Option<String>,
@@ -293,7 +293,7 @@ pub struct Address {
   pub address_default: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct ClientDetails {
   #[serde(rename = "accept_language")]
   pub accept_language: Option<serde_json::Value>,
@@ -314,7 +314,7 @@ pub struct ClientDetails {
   pub user_agent: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: i64,
@@ -389,7 +389,7 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct DiscountApplication {
   #[serde(rename = "target_type")]
   pub target_type: String,
@@ -413,7 +413,7 @@ pub struct DiscountApplication {
   pub code: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct DiscountCode {
   #[serde(rename = "code")]
   pub code: String,
@@ -425,7 +425,7 @@ pub struct DiscountCode {
   pub discount_code_type: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Fulfillment {
   #[serde(rename = "id")]
   pub id: i64,
@@ -479,7 +479,7 @@ pub struct Fulfillment {
   pub line_items: Vec<LineItem>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct LineItem {
   #[serde(rename = "id")]
   pub id: i64,
@@ -560,7 +560,7 @@ pub struct LineItem {
   pub discount_allocations: Vec<DiscountAllocation>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct DiscountAllocation {
   #[serde(rename = "amount")]
   pub amount: String,
@@ -572,7 +572,7 @@ pub struct DiscountAllocation {
   pub discount_application_index: i64,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Set {
   #[serde(rename = "shop_money")]
   pub shop_money: Money,
@@ -581,7 +581,7 @@ pub struct Set {
   pub presentment_money: Money,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Money {
   #[serde(rename = "amount")]
   pub amount: String,
@@ -590,7 +590,7 @@ pub struct Money {
   pub currency_code: Currency,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct NoteAttribute {
   #[serde(rename = "name")]
   pub name: String,
@@ -599,7 +599,7 @@ pub struct NoteAttribute {
   pub value: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct TaxLine {
   #[serde(rename = "price")]
   pub price: String,
@@ -614,7 +614,7 @@ pub struct TaxLine {
   pub title: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct FulfillmentReceipt {
   #[serde(rename = "testcase")]
   pub testcase: bool,
@@ -623,7 +623,7 @@ pub struct FulfillmentReceipt {
   pub authorization: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct PaymentDetails {
   #[serde(rename = "credit_card_bin")]
   pub credit_card_bin: Option<serde_json::Value>,
@@ -641,7 +641,7 @@ pub struct PaymentDetails {
   pub credit_card_company: String,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Refund {
   #[serde(rename = "id")]
   pub id: i64,
@@ -677,7 +677,7 @@ pub struct Refund {
   pub refund_line_items: Vec<RefundLineItem>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct RefundLineItem {
   #[serde(rename = "id")]
   pub id: i64,
@@ -710,7 +710,7 @@ pub struct RefundLineItem {
   pub line_item: LineItem,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct Transaction {
   #[serde(rename = "id")]
   pub id: i64,
@@ -773,10 +773,10 @@ pub struct Transaction {
   pub user_id: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct TransactionReceipt {}
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Default, Deserialize, JsonSchema)]
 pub struct ShippingLine {
   #[serde(rename = "id")]
   pub id: i64,
@@ -827,31 +827,30 @@ pub enum Currency {
   Usd,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
 
 pub struct OrderArg {
   #[serde(rename = "line_items")]
-    pub line_items: Vec<LineItemArg>,
+  pub line_items: Vec<LineItemArg>,
 
-    #[serde(rename = "customer")]
-    pub customer: CustomerArg,
+  #[serde(rename = "customer")]
+  pub customer: CustomerArg,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
 pub struct CustomerArg {
-    #[serde(rename = "id")]
-    pub id: i64,
+  #[serde(rename = "id")]
+  pub id: i64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
 pub struct LineItemArg {
-    #[serde(rename = "variant_id")]
-    pub variant_id: i64,
+  #[serde(rename = "variant_id")]
+  pub variant_id: i64,
 
-    #[serde(rename = "quantity")]
-    pub quantity: i64,
+  #[serde(rename = "quantity")]
+  pub quantity: i64,
 }
-
 
 impl Default for Currency {
   fn default() -> Self {
