@@ -3,6 +3,7 @@ use crate::result::*;
 use crate::types::{DateTime, Utc};
 
 mod types;
+use self::fulfillment::Fulfillment;
 pub use self::types::*;
 mod fulfillment;
 pub use self::fulfillment::NewFulfillment;
