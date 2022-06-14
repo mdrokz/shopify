@@ -20,7 +20,7 @@ pub struct CustomerAddress {
   pub address1: String,
 
   #[serde(rename = "address2")]
-  pub address2: String,
+  pub address2: Option<String>,
 
   #[serde(rename = "city")]
   pub city: String,
@@ -35,7 +35,7 @@ pub struct CustomerAddress {
   pub country_name: String,
 
   #[serde(rename = "company")]
-  pub company: String,
+  pub company: Option<String>,
 
   #[serde(rename = "customer_id")]
   pub customer_id: i64,
