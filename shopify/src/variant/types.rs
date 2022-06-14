@@ -2,7 +2,7 @@ use schemars::JsonSchema;
 
 use crate::types::{Date};
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
 pub struct Variant {
   pub id: i64,
   pub product_id: i64,
@@ -29,4 +29,11 @@ pub struct Variant {
   pub inventory_item_id: i64,
   pub old_inventory_quantity: i64,
   pub requires_shipping: bool,
+}
+
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+pub struct VariantArg {
+  pub product_id: i64,
+  pub option1: String,
+  pub price: String
 }
