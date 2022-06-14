@@ -1,5 +1,5 @@
-use crate::pagination::{GetPage, Paginated};
 use crate::client::{Client, Method};
+use crate::pagination::{GetPage, Paginated};
 use crate::result::*;
 use serde::Serialize;
 
@@ -22,38 +22,97 @@ request_query! {
 // }
 
 impl Client {
-  pub async fn list_product_variant(&self, params: &GetVariantListParams) -> ShopifyResult<Paginated<Vec<Variant>>> {
+  pub async fn list_product_variant(
+    &self,
+    params: &GetVariantListParams,
+  ) -> ShopifyResult<Paginated<Vec<Variant>>> {
     shopify_wrap! {
       pub struct Res {
         variants: Vec<Variant>,
       }
     }
 
-    let res: Paginated<Res> = self.request_with_params_paginated(
-      Method::GET,
-      &format!("/admin/api/{}/variants.json",self.context.api_version),
-      params,
-      std::convert::identity,
-    ).await?;
+    let res: Paginated<Res> = self
+      .request_with_params_paginated(
+        Method::GET,
+        &format!("/admin/api/{}/variants.json", self.context.api_version),
+        params,
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
-  pub async fn list_variant_page(&self, params: &GetPage) -> ShopifyResult<Paginated<Vec<Variant>>> {
+  pub async fn list_variant_page(
+    &self,
+    params: &GetPage,
+  ) -> ShopifyResult<Paginated<Vec<Variant>>> {
     shopify_wrap! {
       pub struct Res {
         variants: Vec<Variant>,
       }
     }
-    let res: Paginated<Res> = self.request_with_params_paginated(
-      Method::GET,
-      &format!("/admin/api/{}/variants.json",self.context.api_version),
-      params,
-      std::convert::identity,
-    ).await?;
+    let res: Paginated<Res> = self
+      .request_with_params_paginated(
+        Method::GET,
+        &format!("/admin/api/{}/variants.json", self.context.api_version),
+        params,
+        std::convert::identity,
+      )
+      .await?;
     Ok(res.map(|p| p.into_inner()))
   }
 
- pub async fn update_product_variant<V: Serialize>(&self, id: i64, value: V) -> ShopifyResult<Variant> {
+  pub async fn create_product_variant(&self,variant: VariantArg) -> ShopifyResult<Variant> {
+    shopify_wrap! {
+      pub struct Res {
+        variant: Variant,
+      }
+
+      pub struct Body {
+        variant: VariantArg
+      }
+    }
+
+    let path = format!(
+      "/admin/api/{}/variant.json",
+      self.context.api_version
+    );
+    let res: Res = self
+      .request(Method::POST, &path, move |b| {
+        b.json(&Body {variant: variant.clone()})
+      })
+      .await?;
+    Ok(res.into_inner())
+  }
+
+  pub async fn delete_product_variant(&self,product_id: i64) -> ShopifyResult<()> {
+    let path = format!(
+      "/admin/api/{}/products/{}.json",
+      self.context.api_version, product_id
+    );
+    let _ = self
+      .request(Method::DELETE, &path, std::convert::identity)
+      .await?;
+    Ok(())
+  }
+
+  pub async fn delete_variant(&self,product_id: i64,variant_id: i64) -> ShopifyResult<()> {
+    let path = format!(
+      "/admin/api/{}/products/{}/variants/{}.json",
+      self.context.api_version, product_id,variant_id
+    );
+    let _ = self
+      .request(Method::DELETE, &path, std::convert::identity)
+      .await?;
+    Ok(())
+  }
+
+  pub async fn update_product_variant<V: Serialize>(
+    &self,
+    id: i64,
+    value: V,
+  ) -> ShopifyResult<Variant> {
     shopify_wrap! {
       pub struct Res {
         variant: Variant,
@@ -61,11 +120,13 @@ impl Client {
     }
 
     let path = format!("/admin/variants/{}.json", id);
-    let res: Res = self.request(Method::PUT, &path, move |b| {
-      b.json(&json!({
-        "variant": value,
-      }))
-    }).await?;
+    let res: Res = self
+      .request(Method::PUT, &path, move |b| {
+        b.json(&json!({
+          "variant": value,
+        }))
+      })
+      .await?;
     Ok(res.into_inner())
   }
 }
