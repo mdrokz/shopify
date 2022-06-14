@@ -38,7 +38,7 @@ pub struct CustomerAddress {
   pub company: String,
 
   #[serde(rename = "customer_id")]
-  pub customer_id: CustomerId,
+  pub customer_id: i64,
 
   #[serde(rename = "first_name")]
   pub first_name: String,
