@@ -846,7 +846,16 @@ pub struct CustomerArg {
 #[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
 pub struct LineItemArg {
   #[serde(rename = "variant_id")]
-  pub variant_id: i64,
+  pub variant_id: Option<i64>,
+
+  #[serde(rename = "title")]
+  pub title: String,
+
+  #[serde(rename = "name")]
+  pub name: String,
+
+  #[serde(rename = "price")]
+  pub price: String,
 
   #[serde(rename = "quantity")]
   pub quantity: i64,
