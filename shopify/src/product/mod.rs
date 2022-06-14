@@ -36,6 +36,40 @@ impl Client {
     Ok(res.map(|p| p.into_inner()))
   }
 
+  pub async fn create_product(&self,product: ProductArg) -> ShopifyResult<Product> {
+    shopify_wrap! {
+      pub struct Res {
+        product: Product,
+      }
+
+      pub struct Body {
+        product: ProductArg
+      }
+    }
+
+    let path = format!(
+      "/admin/api/{}/products.json",
+      self.context.api_version
+    );
+    let res: Res = self
+      .request(Method::POST, &path, move |b| {
+        b.json(&Body {product: product.clone()})
+      })
+      .await?;
+    Ok(res.into_inner())
+  }
+
+  pub async fn delete_product(&self,product_id: i64) -> ShopifyResult<()> {
+    let path = format!(
+      "/admin/api/{}/products/{}.json",
+      self.context.api_version, product_id
+    );
+    let _ = self
+      .request(Method::DELETE, &path, std::convert::identity)
+      .await?;
+    Ok(())
+  }
+
   pub async fn list_product_page(
     &self,
     params: &GetPage,
