@@ -3,7 +3,7 @@ use serde_json::Value;
 use crate::types::{Date};
 pub use crate::variant::Variant;
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
 pub struct Product {
   pub id: i64,
   pub title: String,
@@ -23,7 +23,7 @@ pub struct Product {
   pub image: Option<Image>,
 }
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
 pub struct Image {
   pub id: i64,
   pub product_id: i64,
@@ -37,11 +37,20 @@ pub struct Image {
   pub variant_ids: Vec<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
 pub struct ProductOption {
   pub id: i64,
   pub product_id: i64,
   pub name: String,
   pub position: i64,
   pub values: Vec<String>,
+}
+
+#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+pub struct ProductArg {
+  pub title: String,
+  pub body_html: String,
+  pub vendor: String,
+  pub product_type: String,
+  pub tags: Vec<String>
 }
