@@ -1,3 +1,4 @@
+use serde::Serialize;
 
 use crate::client::{Client, Method};
 use crate::order::Order;
@@ -8,53 +9,53 @@ pub mod types;
 pub use self::types::*;
 
 impl Client {
-  pub async fn get_webhook_list(&self) -> ShopifyResult<Vec<Customer>> {
+  pub async fn get_webhook_list(&self, params: &WebHookParams) -> ShopifyResult<Vec<Webhook>> {
     shopify_wrap! {
       pub struct Res {
-        customers: Vec<Customer>,
+        webhooks: Vec<Webhook>,
       }
     }
 
     let res: Res = self
-      .request(
+      .request_with_params(
         Method::GET,
-        &format!("/admin/api/{}/customers.json", self.context.api_version),
+        &format!("/admin/api/{}/webhooks.json", self.context.api_version),
+        params,
         std::convert::identity,
       )
       .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn create_webhook(&self, customer: &CustomerArg) -> ShopifyResult<Customer> {
+  pub async fn create_webhook<T>(&self, webhook: &WebHookBody<T>) -> ShopifyResult<Customer>
+  where
+    T: Serialize,
+  {
     shopify_wrap! {
       pub struct Res {
         customer:Customer,
-      }
-
-      pub struct Body {
-        customer: CustomerArg
       }
     }
 
     let res: Res = self
       .request(
         Method::POST,
-        &format!("/admin/api/{}/customers.json", self.context.api_version),
-        |b| b.json(&Body { customer: customer.clone() }),
+        &format!("/admin/api/{}/webhooks.json", self.context.api_version),
+        |b| b.json(webhook),
       )
       .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn get_webhook(&self, id: i64) -> ShopifyResult<Customer> {
+  pub async fn get_webhook(&self, webhook_id: i64) -> ShopifyResult<Webhook> {
     shopify_wrap! {
       pub struct Res {
-        customer: Customer,
+        webhook: Webhook,
       }
     }
     let path = format!(
-      "/admin/api/{}/customers/{}.json",
-      self.context.api_version, id
+      "/admin/api/{}/webhooks/{}.json",
+      self.context.api_version, webhook_id
     );
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
@@ -62,81 +63,65 @@ impl Client {
     Ok(res.into_inner())
   }
 
-  pub async fn get_customer_orders(&self, id: i64) -> ShopifyResult<Vec<Order>> {
+  pub async fn get_webhook_count(&self) -> ShopifyResult<i64> {
     shopify_wrap! {
-      pub struct Res {
-        orders: Vec<Order>,
-      }
-    }
-    let path = format!(
-      "/admin/api/{}/customers/{}/orders.json",
-      self.context.api_version, id
-    );
-    let res: Res = self
-      .request(Method::GET, &path, std::convert::identity)
-      .await?;
-    Ok(res.into_inner())
-  }
-
-  pub async fn get_webhook_count(&self) -> ShopifyResult<CustomerCount> {
-    shopify_wrap! {
-      CustomerCount,
       pub struct Res {
         count: i64,
       }
     }
     let path = format!(
-      "/admin/api/{}/customers/count.json",
+      "/admin/api/{}/webhooks/count.json",
       self.context.api_version
     );
     let res: Res = self
       .request(Method::GET, &path, std::convert::identity)
       .await?;
-    Ok(res.into())
+    Ok(res.into_inner())
   }
 
-  pub async fn update_webhook(&self, customer: &CustomerArg, id: i64) -> ShopifyResult<Customer> {
+  pub async fn update_webhook(
+    &self,
+    webhook: &WebHookBody,
+    webhook_id: i64,
+  ) -> ShopifyResult<Webhook> {
     shopify_wrap! {
       pub struct Res {
-        customer: Customer,
-      }
-      pub struct Body {
-        customer: CustomerArg
+        webhook: Webhook,
       }
     }
     let path = format!(
-      "/admin/api/{}/customers/{}.json",
-      self.context.api_version, id
+      "/admin/api/{}/webhooks/{}.json",
+      self.context.api_version, webhook_id
     );
     let res: Res = self
-      .request(Method::PUT, &path, |b| b.json(&Body { customer: customer.clone() }))
+      .request(Method::PUT, &path, |b| b.json(&webhook))
       .await?;
     Ok(res.into_inner())
   }
 
-  pub async fn delete_webhook(&self, params: &CustomerParams) -> ShopifyResult<Vec<Customer>> {
-    shopify_wrap! {
-      pub struct Res {
-        customers: Vec<Customer>,
-      }
-    }
+  pub async fn delete_webhook(&self, webhook_id: i64) -> ShopifyResult<()> {
     let path = format!(
-      "/admin/api/{}/customers/search.json",
-      self.context.api_version
+      "/admin/api/{}/webhooks/{}.json",
+      self.context.api_version, webhook_id
     );
-    let res: Res = self
-      .request_with_params(Method::PUT, &path, params, std::convert::identity)
+    let _ = self
+      .request(Method::DELETE, &path, std::convert::identity)
       .await?;
-    Ok(res.into_inner())
+    Ok(())
   }
 }
 
 request_query! {
-    pub struct CustomerParams {
-        pub fields: Option<String>,
+    pub struct WebHookParams {
+        pub address: Option<String>,
+        pub created_at_max: Option<String>,
+        pub created_at_min: Option<String>,
+        pub fields: Option<Vec<String>>,
         pub limit: Option<i64>,
-        pub order: Option<String>,
-        pub query: Option<String>
+        pub since_id: Option<i64>,
+        pub topic: Option<String>,
+        pub updated_at_max: Option<String>,
+        pub updated_at_min: Option<String>,
     }
 }
 
