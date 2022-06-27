@@ -1,6 +1,27 @@
 use schemars::JsonSchema;
+use serde::Serialize;
+
+#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
+pub struct WebHookArg {
+  #[serde(rename = "address")]
+  pub address: String,
+
+  #[serde(rename = "fields")]
+  pub fields: Vec<String>,
+
+  #[serde(rename = "format")]
+  pub format: String,
+
+  #[serde(rename = "format")]
+  pub topic: String,
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+pub struct WebHookBody<T: Serialize = WebHookArg> {
+  webhook: T,
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
 pub struct CustomerDataRequest {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -18,7 +39,7 @@ pub struct CustomerDataRequest {
   pub data_request: DataRequest,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
 pub struct CustomerDataRedact {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -33,7 +54,7 @@ pub struct CustomerDataRedact {
   pub customer: Customer,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
 pub struct ShopRedact {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -42,7 +63,7 @@ pub struct ShopRedact {
   pub shop_domain: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: Option<i64>,
@@ -54,13 +75,13 @@ pub struct Customer {
   pub phone: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
 pub struct DataRequest {
   #[serde(rename = "id")]
   pub id: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
 pub struct Webhook {
   #[serde(rename = "address")]
   pub address: String,
