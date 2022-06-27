@@ -1,7 +1,6 @@
 use serde::Serialize;
 
 use crate::client::{Client, Method};
-use crate::order::Order;
 use crate::result::*;
 
 pub mod types;
