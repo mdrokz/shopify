@@ -18,7 +18,7 @@ pub struct WebHookArg {
 
 #[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
 pub struct WebHookBody<T: Serialize = WebHookArg> {
-  webhook: T,
+  pub webhook: T,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
