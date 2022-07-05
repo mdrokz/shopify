@@ -32,6 +32,7 @@ use sqlx::{FromRow, Type};
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerCount {
@@ -39,6 +40,7 @@ pub struct CustomerCount {
 }
 
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerArg {
@@ -62,6 +64,7 @@ pub struct CustomerArg {
 }
 
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AddressArg {
@@ -91,6 +94,7 @@ pub struct AddressArg {
 }
 
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Customer {
@@ -124,6 +128,7 @@ pub struct Customer {
 }
 
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Address {
@@ -148,6 +153,7 @@ pub struct Address {
 }
 
 #[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
+#[cfg_attr(feature = "sqlx", sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct MarketingConsent {
