@@ -6,7 +6,6 @@ use sqlx::FromRow;
 
 
 
-#[cfg_attr(feature = "sqlx", derive(FromRow))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
