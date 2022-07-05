@@ -31,16 +31,14 @@ use sqlx::{FromRow, Type};
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerCount {
   pub count: i64,
 }
 
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerArg {
@@ -63,8 +61,7 @@ pub struct CustomerArg {
   pub addresses: Vec<AddressArg>,
 }
 
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AddressArg {
@@ -93,8 +90,7 @@ pub struct AddressArg {
   pub country: String,
 }
 
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Customer {
@@ -127,8 +123,7 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Address {
@@ -152,8 +147,7 @@ pub struct Address {
   pub address_default: bool,
 }
 
-#[cfg_attr(feature = "sqlx", derive(FromRow,Type))]
-#[cfg_attr(feature = "sqlx", sqlx(transparent))]
+#[cfg_attr(feature = "sqlx", derive(FromRow,Type), sqlx(transparent))]
 #[cfg_attr(feature = "openapi", derive(JsonSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct MarketingConsent {
