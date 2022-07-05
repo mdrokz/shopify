@@ -29,6 +29,6 @@ dotenv = "0.15.0"
 
 
 [features]
-default = ["openapi"]
+default = []
 sqlx = []
 openapi = []
