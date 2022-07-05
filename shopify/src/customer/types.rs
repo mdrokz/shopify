@@ -61,7 +61,9 @@ pub struct CustomerArg {
   pub addresses: Vec<AddressArg>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AddressArg {
   #[serde(rename = "address1")]
   pub address1: String,
