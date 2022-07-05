@@ -1,20 +1,31 @@
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "openapi")]
 use schemars::JsonSchema;
 
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 
 pub struct SavedSearchCount {
     pub count: i64
 }
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct SavedSearchArg {
     #[serde(rename = "customer_saved_search")]
     pub customer_saved_search: CustomerSavedSearch,
 }
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerSavedSearch {
     #[serde(rename = "name")]
     pub name: String,
@@ -24,7 +35,9 @@ pub struct CustomerSavedSearch {
 }
 
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerSavedSearchResponse {
   #[serde(rename = "created_at")]
   pub created_at: String,

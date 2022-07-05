@@ -10,11 +10,17 @@
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
-
-use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug,Clone, Serialize, Deserialize,JsonSchema)]
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerAddress {
   #[serde(rename = "address1")]
   pub address1: String,
@@ -65,7 +71,9 @@ pub struct CustomerAddress {
   pub zip: String,
 }
 
-#[derive(Debug,Clone, Serialize, Deserialize,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerId {
   #[serde(rename = "id")]
   pub id: i64,

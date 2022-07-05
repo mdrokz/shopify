@@ -2,7 +2,15 @@ use std::borrow::Cow;
 
 use crate::session::types::OnlineAccessInfo;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AuthQuery {
   pub code: String,
   pub timestamp: String,
@@ -12,12 +20,17 @@ pub struct AuthQuery {
   pub hmac: Option<String>,
 }
 
-#[derive(Clone, Deserialize, Debug)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AccessTokenResponse {
   pub access_token: String,
   pub scope: String,
 }
-#[derive(Clone, Deserialize, Debug)]
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AuthResponse {
   #[serde(flatten)]
   pub access_token_response: AccessTokenResponse,
@@ -25,14 +38,18 @@ pub struct AuthResponse {
   pub online_accesss_info: OnlineAccessInfo,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AuthBody {
   pub client_id: String,
   pub client_secret: String,
   pub code: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AuthOptions<'a> {
   pub path: String,
   pub content_type: String,

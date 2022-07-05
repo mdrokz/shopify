@@ -1,7 +1,14 @@
+#[cfg(feature = "openapi")]
 use schemars::JsonSchema;
 
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq,JsonSchema)]
+
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum FulfillmentServiceScope {
   CurrentClient,
@@ -23,7 +30,9 @@ impl AsRef<str> for FulfillmentServiceScope {
   }
 }
 
-#[derive(Debug, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct FulfillmentService {
   pub id: i64,
   pub name: String,
@@ -37,7 +46,9 @@ pub struct FulfillmentService {
   pub location_id: i64,
 }
 
-#[derive(Debug, Serialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct NewFulfillmentService {
   pub name: String,
   pub callback_url: String,
@@ -47,7 +58,9 @@ pub struct NewFulfillmentService {
   pub format: String,
 }
 
-#[derive(Debug, Serialize, Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct UpdateFulfillmentService {
   #[serde(skip_serializing_if = "Option::is_none")]
   pub name: Option<String>,

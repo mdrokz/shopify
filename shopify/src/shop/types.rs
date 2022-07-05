@@ -1,5 +1,11 @@
-use crate::types::{Date, Value};
+use crate::types::{Date};
+
+#[cfg(feature = "openapi")]
 use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
 
 /// The Shopify API's shop object is a collection of the general settings and information about the shop.
 /// // Example code that deserializes and serializes the model.
@@ -30,7 +36,9 @@ use schemars::JsonSchema;
 // }
 
 /// The Shopify API's shop object is a collection of the general settings and information about the shop.
-#[derive(Debug, Clone, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Shop {
   #[serde(rename = "id")]
   pub id: i64,

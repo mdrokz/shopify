@@ -1,8 +1,15 @@
 use crate::types::{Date};
 use serde_json::Value;
+
+#[cfg(feature = "openapi")]
 use schemars::JsonSchema;
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Location {
   pub id: i64,
   pub name: String,
@@ -22,7 +29,9 @@ pub struct Location {
   pub updated_at: String,
 }
 
-#[derive(Debug, Serialize, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct InventoryLevel {
   pub inventory_item_id: i64,
   pub location_id: i64,

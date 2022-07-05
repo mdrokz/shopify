@@ -1,6 +1,13 @@
-use chrono::{DateTime, Utc};
 use std::{borrow::Borrow, hash::Hash};
+use chrono::{DateTime, Utc};
 use uuid::Uuid;
+
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
 
 pub trait SessionStorage {
   fn store_session(&mut self, session: Session) -> bool;
@@ -8,7 +15,9 @@ pub trait SessionStorage {
   fn delete_session(&mut self, id: Uuid) -> bool;
 }
 
-#[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Hash, PartialEq, Eq,Debug, Serialize, Deserialize, Default, Clone)]
 pub struct AssociatedUser {
   pub id: u64,
   pub first_name: String,
@@ -20,14 +29,17 @@ pub struct AssociatedUser {
   pub collaborator: bool,
 }
 
-#[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Hash, PartialEq, Eq,Debug, Serialize, Deserialize, Default, Clone)]
 pub struct OnlineAccessInfo {
   pub expires_in: i64,
   pub associated_user_scope: String,
   pub associated_user: AssociatedUser,
 }
 
-#[derive(Hash, PartialEq, Eq, Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[derive(Hash, PartialEq, Eq,Debug, Serialize, Deserialize, Clone)]
 pub struct Session {
   pub id: Uuid,
   pub shop: String,

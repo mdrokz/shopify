@@ -1,8 +1,14 @@
+#[cfg(feature = "openapi")]
 use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
 
 use crate::types::{Date};
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Variant {
   pub id: i64,
   pub product_id: i64,
@@ -31,7 +37,9 @@ pub struct Variant {
   pub requires_shipping: bool,
 }
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct VariantArg {
   pub product_id: i64,
   pub option1: String,

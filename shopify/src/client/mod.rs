@@ -1,7 +1,6 @@
 use crate::context::Context;
 use crate::pagination::Paginated;
 use crate::result::*;
-use crate::session::types::SessionStorage;
 use crate::types::{DateTime, Utc};
 pub use reqwest::Method;
 use reqwest::Response;

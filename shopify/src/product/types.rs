@@ -1,9 +1,17 @@
-use schemars::JsonSchema;
 use serde_json::Value;
 use crate::types::{Date};
 pub use crate::variant::Variant;
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Product {
   pub id: i64,
   pub title: String,
@@ -23,7 +31,9 @@ pub struct Product {
   pub image: Option<Image>,
 }
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Image {
   pub id: i64,
   pub product_id: i64,
@@ -37,7 +47,9 @@ pub struct Image {
   pub variant_ids: Vec<i64>,
 }
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct ProductOption {
   pub id: i64,
   pub product_id: i64,
@@ -46,7 +58,9 @@ pub struct ProductOption {
   pub values: Vec<String>,
 }
 
-#[derive(Debug, Serialize,Clone, Deserialize,Default,JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct ProductArg {
   pub title: String,
   pub body_html: String,

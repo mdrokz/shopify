@@ -1,7 +1,14 @@
-use schemars::JsonSchema;
 use serde::Serialize;
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct WebHookArg {
   #[serde(rename = "address")]
   pub address: String,
@@ -16,12 +23,16 @@ pub struct WebHookArg {
   pub topic: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct WebHookBody<T: Serialize = WebHookArg> {
   pub webhook: T,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerDataRequest {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -39,7 +50,9 @@ pub struct CustomerDataRequest {
   pub data_request: DataRequest,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Clone, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerDataRedact {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -54,7 +67,9 @@ pub struct CustomerDataRedact {
   pub customer: Customer,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct ShopRedact {
   #[serde(rename = "shop_id")]
   pub shop_id: i64,
@@ -63,7 +78,9 @@ pub struct ShopRedact {
   pub shop_domain: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Customer {
   #[serde(rename = "id")]
   pub id: Option<i64>,
@@ -75,13 +92,17 @@ pub struct Customer {
   pub phone: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct DataRequest {
   #[serde(rename = "id")]
   pub id: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Webhook {
   #[serde(rename = "address")]
   pub address: String,

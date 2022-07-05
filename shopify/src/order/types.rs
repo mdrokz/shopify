@@ -11,10 +11,17 @@
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
 
-use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize,Default, Deserialize, JsonSchema)]
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Order {
     #[serde(rename = "id")]
     pub id: i64,
@@ -260,7 +267,9 @@ pub struct Order {
     pub shipping_lines: Vec<Option<serde_json::Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Set {
     #[serde(rename = "shop_money")]
     pub shop_money: Money,
@@ -269,7 +278,9 @@ pub struct Set {
     pub presentment_money: Money,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Money {
     #[serde(rename = "amount")]
     pub amount: String,
@@ -278,7 +289,10 @@ pub struct Money {
     pub currency_code: Currency,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Customer {
     #[serde(rename = "id")]
     pub id: i64,
@@ -359,7 +373,9 @@ pub struct Customer {
     pub default_address: DefaultAddress,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct DefaultAddress {
     #[serde(rename = "id")]
     pub id: i64,
@@ -413,7 +429,9 @@ pub struct DefaultAddress {
     pub default_address_default: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct MarketingConsent {
     #[serde(rename = "state")]
     pub state: String,
@@ -428,7 +446,9 @@ pub struct MarketingConsent {
     pub consent_collected_from: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize,Clone,Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct LineItem {
     #[serde(rename = "id")]
     pub id: i64,
@@ -512,7 +532,8 @@ pub struct LineItem {
     pub discount_allocations: Vec<Option<serde_json::Value>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum Currency {
     #[serde(rename = "CAD")]
     Cad,
@@ -525,7 +546,9 @@ pub enum Currency {
 }
 
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 
 pub struct OrderArg {
   #[serde(rename = "line_items")]
@@ -535,13 +558,17 @@ pub struct OrderArg {
   pub customer: CustomerArg,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerArg {
   #[serde(rename = "id")]
   pub id: i64,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct LineItemArg {
   #[serde(rename = "variant_id")]
   pub variant_id: Option<i64>,

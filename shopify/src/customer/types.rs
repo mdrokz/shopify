@@ -11,8 +11,13 @@
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
 
-use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "openapi")]
+use schemars::JsonSchema;
+
+#[cfg(feature = "sqlx")]
+use sqlx::FromRow;
 
 // Example code that deserializes and serializes the model.
 // extern crate serde;
@@ -26,12 +31,16 @@ use serde::{Deserialize, Serialize};
 //     let json = r#"{"answer": 42}"#;
 //     let model: [object Object] = serde_json::from_str(&json).unwrap();
 // }
-#[derive(Debug, Default, Clone, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerCount {
   pub count: i64,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct CustomerArg {
   #[serde(rename = "first_name")]
   pub first_name: String,
@@ -79,7 +88,9 @@ pub struct AddressArg {
   pub country: String,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Customer {
   pub id: i64,
   pub email: String,
@@ -110,7 +121,9 @@ pub struct Customer {
   pub default_address: Address,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Address {
   pub id: i64,
   pub customer_id: i64,
@@ -132,7 +145,9 @@ pub struct Address {
   pub address_default: bool,
 }
 
-#[derive(Serialize, Debug, Clone, Deserialize, Default, JsonSchema)]
+#[cfg_attr(feature = "sqlx", derive(FromRow))]
+#[cfg_attr(feature = "openapi", derive(JsonSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct MarketingConsent {
   pub state: String,
   pub opt_in_level: String,
