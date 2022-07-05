@@ -37,9 +37,29 @@ use schemars::{schema::Schema, schema_for_value, JsonSchema};
 #[derive(Serialize, Debug, Clone, Deserialize)]
 pub struct Date(pub DateTime<Utc>);
 
+#[derive(Serialize, Debug, Clone, Deserialize)]
+pub struct UID(pub uuid::Uuid);
+
 impl Default for Date {
   fn default() -> Self {
     Self(Utc::now())
+  }
+}
+
+impl Default for UID {
+  fn default() -> Self {
+    Self(uuid::Uuid::new_v4())
+  }
+}
+
+impl JsonSchema for UID {
+  fn schema_name() -> String {
+    "Unique ID".into()
+  }
+
+  fn json_schema(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+    let root_schema = schema_for_value!(UID::default());
+    Schema::Object(root_schema.schema)
   }
 }
 
