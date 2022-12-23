@@ -9,6 +9,7 @@ pub mod client;
 mod types;
 
 pub mod fulfillment_service;
+pub mod abandoned_cart;
 pub mod inventory;
 pub mod session;
 pub mod customer;
