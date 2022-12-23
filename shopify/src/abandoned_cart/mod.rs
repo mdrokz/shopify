@@ -22,7 +22,7 @@ shopify_wrap! {
 }
 
 impl Client {
-  async fn get_abandoned_checkouts(&self,params: &CheckoutParams) -> ShopifyResult<Vec<Checkout>> {
+  pub async fn get_abandoned_checkouts(&self,params: &CheckoutParams) -> ShopifyResult<Vec<Checkout>> {
     let res: GetAbandonedCheckouts = self.request_with_params(
       Method::GET,
       &format!("/admin/api/{}/checkouts.json", self.context.api_version),
